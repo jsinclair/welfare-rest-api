@@ -29,4 +29,27 @@ function validateAndReturnJSONBody() {
   return $decoded;
 }
 
+function validateJSONObject($json, $requiredKeys, $allowNull = true) {
+  $missingKeys = false;
+  $missingKeysString = 'Missing parameters:';
+  foreach ($requiredKeys as $key) {
+    if (!array_key_exists ($key, $json)
+      || (!$allowNull && $json[$key] == null)) {
+
+      if ($missingKeys) {
+        $missingKeysString .= ',';
+      } else {
+        $missingKeys = true;
+      }
+      $missingKeysString .= ' '.$key;
+
+    }
+  }
+
+  if ($missingKeys) {
+    $missingKeysString .= '.';
+    throw new Exception($missingKeysString);
+  }
+}
+
 ?>
