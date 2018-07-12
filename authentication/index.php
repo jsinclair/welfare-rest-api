@@ -11,10 +11,13 @@ $errors = array();
 $responseCode = 200;
 
 // Request validation
+$decodedJSON;
 try {
   validateRequestMethod();
 
   validateContentType();
+
+  $decodedJSON = validateAndReturnJSONBody();
 } catch(Exception $e) {
   $responseCode = 400;
   array_push($errors, buildError('Invalid Request', $e->getMessage()));
@@ -24,8 +27,7 @@ if ($responseCode == 200) {
 
   $data["hello"] = "world";
 
-  $entityBody = json_decode(file_get_contents('php://input'), true);
-  //print_r($entityBody["token"]);
+  //print_r($decodedJSON["token"]);
 
 }
 
