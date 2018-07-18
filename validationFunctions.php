@@ -9,8 +9,9 @@ function validateRequestMethod($validMethod = 'POST') {
 function validateContentType($validType = 'application/json') {
   //Make sure that the content type of the POST request has been set to application/json
   $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
-  if(strcasecmp($contentType, $validType) != 0) {
-      throw new Exception('Content type must be: '.$validType);
+  error_log(strpos(strtolower($contentType), strtolower($validType))."\n", 3, "./error.log");
+  if (strpos(strtolower($contentType), strtolower($validType)) === false) {
+    throw new Exception('Content type must be: '.$validType);
   }
 }
 

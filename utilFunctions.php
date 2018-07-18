@@ -1,7 +1,7 @@
 <?php
 
 function buildError($title, $detail) {
-  return array('title' => $title, 'details' => $detail);
+  return array('title' => $title, 'detail' => $detail);
 }
 
 function handleResponse($responseCode, $data, $errors) {

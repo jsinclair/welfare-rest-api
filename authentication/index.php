@@ -11,6 +11,8 @@ $errors = array();
 $responseCode = 200;
 
 // Request validation
+//error_log(json_encode($headers)."\n", 3, "./error.log");
+//error_log($_SERVER['REQUEST_METHOD']."\n", 3, "./error.log");
 try {
   validateRequestMethod();
 
@@ -22,12 +24,14 @@ try {
   array_push($errors, buildError('Invalid Request', $e->getMessage()));
 }
 
-try {
-  validateJSONObject($decodedJSON,
-    ['username', 'password', 'os_version', 'device', 'uuid'], false);
-} catch(Exception $e) {
-  $responseCode = 400;
-  array_push($errors, buildError('Missing Parameters', $e->getMessage()));
+if ($responseCode == 200) {
+  try {
+    validateJSONObject($decodedJSON,
+      ['username', 'password', 'os_version', 'device', 'uuid'], false);
+  } catch(Exception $e) {
+    $responseCode = 400;
+    array_push($errors, buildError('Missing Parameters', $e->getMessage()));
+  }
 }
 
 try {

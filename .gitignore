@@ -1,1 +1,5 @@
+# Log files
+*.log
+
+# Mac crap
 .DS_Store
