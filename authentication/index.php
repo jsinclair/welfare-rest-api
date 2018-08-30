@@ -41,14 +41,17 @@ try {
     // If everything has been validated thus far, check if the login details are valid.
     $username = $decodedJSON['username'];
     $password = $decodedJSON['password'];
-    if ($stmt = mysqli_prepare($dbConnection, 'SELECT id FROM organisation_user
+    if ($stmt = mysqli_prepare($dbConnection, 'SELECT ou.id AS user_id, ou.fullname, o.name AS organisation_name
+        FROM organisation_user ou
+        JOIN organisation o
+        ON o.id = ou.organisation_id
         WHERE username = ? AND password = ?')) {
       mysqli_stmt_bind_param($stmt, "ss", $username, $password);
 
       mysqli_stmt_execute($stmt);
 
       /* bind variables to prepared statement */
-      mysqli_stmt_bind_result($stmt, $userID);
+      mysqli_stmt_bind_result($stmt, $userID, $userFullName, $organisationName);
 
       /* fetch values */
       if (mysqli_stmt_fetch($stmt)) {
@@ -71,6 +74,11 @@ try {
 
               if (mysqli_stmt_execute($stmt)) {
                 $data["token"] = $token;
+                $data["user_full_name"] = $userFullName;
+                $data["organisation_name"] = $organisationName;
+
+                // Load up the user info we want to return
+
               } else {
                 throw new Exception("Error initialising session.");
               }
@@ -81,8 +89,6 @@ try {
         throw new Exception("Invalid user credentials.");
       }
     }
-
-    $data["hello"] = "world";
 
     /* close connection */
     mysqli_close($dbConnection);
