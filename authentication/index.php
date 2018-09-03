@@ -73,11 +73,58 @@ try {
                 $token, $osVersion, $device, $uuid);
 
               if (mysqli_stmt_execute($stmt)) {
+
+                // Load up the user info we want to return
                 $data["token"] = $token;
                 $data["user_full_name"] = $userFullName;
                 $data["organisation_name"] = $organisationName;
 
-                // Load up the user info we want to return
+                /* close statement */
+                mysqli_stmt_close($stmt);
+
+                // Load Animal Types
+                if ($stmt = mysqli_prepare($dbConnection, 'SELECT id, description
+                    FROM animal_type
+                    ORDER BY description ASC')) {
+
+                    mysqli_stmt_execute($stmt);
+
+                    /* bind variables to prepared statement */
+                    mysqli_stmt_bind_result($stmt, $id, $description);
+
+                    $animalTypes = [];
+                    /* fetch values, build up animal type list */
+                    while (mysqli_stmt_fetch($stmt)) {
+                        array_push($animalTypes, ["id"=>$id, "description"=>$description]);
+                    }
+
+                    /* close statement */
+                    mysqli_stmt_close($stmt);
+
+                    $data["animal_types"] = $animalTypes;
+                }
+
+                // Load Treatment Types
+                if ($stmt = mysqli_prepare($dbConnection, 'SELECT id, description
+                    FROM treatment
+                    ORDER BY description ASC')) {
+
+                    mysqli_stmt_execute($stmt);
+
+                    /* bind variables to prepared statement */
+                    mysqli_stmt_bind_result($stmt, $id, $description);
+
+                    $treatments = [];
+                    /* fetch values, build up animal type list */
+                    while (mysqli_stmt_fetch($stmt)) {
+                        array_push($treatments, ["id"=>$id, "description"=>$description]);
+                    }
+
+                    /* close statement */
+                    mysqli_stmt_close($stmt);
+
+                    $data["treatments"] = $treatments;
+                }
 
               } else {
                 throw new Exception("Error initialising session.");
