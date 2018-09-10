@@ -6,7 +6,7 @@ define( 'API_ACCESS_KEY', 'AAAAi62vO0A:APA91bHF5BpGysh2dmu29C_MxGPBCGlen_txY7CsJ
 // generated via the cordova phonegap-plugin-push using "senderID" (found in FCM App Console)
 // this was generated from my phone and outputted via a console.log() in the function that calls the plugin
 // my phone, using my FCM senderID, to generate the following registrationId
-$singleID = 'cIfr3Pd7eRw:APA91bH8oBwM93HtO6eKu2DMyh8-0wXk6I1hFptnjtVtvZsBDi6RDAHXA85iylG77VX6dAn1c8CHCajFwvl2yXXTdZFNXzcHLp6pEepdfBQzuiIs0rUxy2J3tTJ6rH2e-KXFseZDxqhZ' ;
+$singleID = 'cIfr3Pd7eRw:APA91bH8oBwM93HtO6eKu2DMyh8-0wXk6I1hFptnjtVtvZsBDi6RDAHXA85iylG77VX6dAn1c8CHCajFwvl2yXXTdZFNXzcHLp6pEepdfBQzuiIs0rUxy2J3tTJ6rH2e-KXFseZDxqhZ';
 $registrationIDs = array(
      'cIfr3Pd7eRw:APA91bH8oBwM93HtO6eKu2DMyh8-0wXk6I1hFptnjtVtvZsBDi6RDAHXA85iylG77VX6dAn1c8CHCajFwvl2yXXTdZFNXzcHLp6pEepdfBQzuiIs0rUxy2J3tTJ6rH2e-KXFseZDxqhZ',
      'cIfr3Pd7eRw:APA91bH8oBwM93HtO6eKu2DMyh8-0wXk6I1hFptnjtVtvZsBDi6RDAHXA85iylG77VX6dAn1c8CHCajFwvl2yXXTdZFNXzcHLp6pEepdfBQzuiIs0rUxy2J3tTJ6rH2e-KXFseZDxqhZ',

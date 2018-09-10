@@ -104,26 +104,31 @@ try {
                     $data["animal_types"] = $animalTypes;
                 }
 
-                // Load Treatment Types
-                if ($stmt = mysqli_prepare($dbConnection, 'SELECT id, description
-                    FROM treatment
-                    ORDER BY description ASC')) {
+                // Load User Permissions
+                if ($stmt = mysqli_prepare($dbConnection, 'SELECT permission_key
+                    FROM user_permission up
+                    JOIN permission p
+                    ON p.id = up.permission_id
+                    WHERE up.user_id = ?')) {
+
+                    // Bind the insert values
+                    mysqli_stmt_bind_param($stmt, "i", $userID);
 
                     mysqli_stmt_execute($stmt);
 
                     /* bind variables to prepared statement */
-                    mysqli_stmt_bind_result($stmt, $id, $description);
+                    mysqli_stmt_bind_result($stmt, $key);
 
-                    $treatments = [];
+                    $permissions = [];
                     /* fetch values, build up animal type list */
                     while (mysqli_stmt_fetch($stmt)) {
-                        array_push($treatments, ["id"=>$id, "description"=>$description]);
+                        array_push($permissions, $key);
                     }
 
                     /* close statement */
                     mysqli_stmt_close($stmt);
 
-                    $data["treatments"] = $treatments;
+                    $data["user_permissions"] = $permissions;
                 }
 
               } else {

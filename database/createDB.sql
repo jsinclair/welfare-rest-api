@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 04, 2018 at 12:58 PM
+-- Generation Time: Sep 10, 2018 at 07:28 AM
 -- Server version: 5.6.38
 -- PHP Version: 7.2.1
 
@@ -28,19 +28,9 @@ CREATE TABLE `animal` (
   `residence_id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `approximate_dob` date DEFAULT NULL COMMENT 'Set when the users sends the approximate age through.',
-  `notes` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `animal_treatment`
---
-
-CREATE TABLE `animal_treatment` (
-  `animal_id` int(11) NOT NULL,
-  `treatment_id` int(11) NOT NULL,
-  `note` text NOT NULL
+  `notes` text NOT NULL,
+  `welfare_number` varchar(15) DEFAULT NULL,
+  `treatments` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -102,7 +92,26 @@ CREATE TABLE `organisation_user` (
 --
 
 INSERT INTO `organisation_user` (`id`, `organisation_id`, `username`, `password`, `fullname`, `contact_number`, `firebase_token`) VALUES
-(1, 1, 'jsincl4ir@gmail.com', 'password', 'James Sinclair', '12345678', NULL);
+(1, 1, 'jsincl4ir@gmail.com', 'password', 'James Sinclair', '12345678', 'c7K5mwR7eU8:APA91bEo060-5u9UhgrYhRPYBkhZb7tnHPQpgaspzabibzPNvmMt_yZw9EBn4rTRs9s16UIlzEE6cN0-O_M2OJgl4l5G_Wu-fdcY635WJ_2fM2U1Ch0D2oYTkRhFLX2YjbSvPOTd-SGL');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `permission`
+--
+
+CREATE TABLE `permission` (
+  `id` int(11) NOT NULL,
+  `permission_key` varchar(10) NOT NULL,
+  `description` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `permission`
+--
+
+INSERT INTO `permission` (`id`, `permission_key`, `description`) VALUES
+(1, 'write', 'The user is allowed to edit animal and residence information.');
 
 -- --------------------------------------------------------
 
@@ -136,22 +145,21 @@ CREATE TABLE `residence` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `treatment`
+-- Table structure for table `user_permission`
 --
 
-CREATE TABLE `treatment` (
-  `id` int(11) NOT NULL,
-  `description` varchar(100) NOT NULL
+CREATE TABLE `user_permission` (
+  `user_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `treatment`
+-- Dumping data for table `user_permission`
 --
 
-INSERT INTO `treatment` (`id`, `description`) VALUES
-(1, 'Deworm'),
-(2, 'Tick/Flea'),
-(3, 'Vaccination');
+INSERT INTO `user_permission` (`user_id`, `permission_id`, `date_added`) VALUES
+(1, 1, '2018-09-09 12:48:42');
 
 -- --------------------------------------------------------
 
@@ -184,13 +192,6 @@ ALTER TABLE `animal`
   ADD KEY `animal_animal_type` (`animal_type_id`);
 
 --
--- Indexes for table `animal_treatment`
---
-ALTER TABLE `animal_treatment`
-  ADD PRIMARY KEY (`animal_id`,`treatment_id`),
-  ADD KEY `animal_treatment_treatment` (`treatment_id`);
-
---
 -- Indexes for table `animal_type`
 --
 ALTER TABLE `animal_type`
@@ -211,6 +212,13 @@ ALTER TABLE `organisation_user`
   ADD KEY `user_organisation` (`organisation_id`);
 
 --
+-- Indexes for table `permission`
+--
+ALTER TABLE `permission`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `permission_key` (`permission_key`);
+
+--
 -- Indexes for table `reminder`
 --
 ALTER TABLE `reminder`
@@ -227,10 +235,11 @@ ALTER TABLE `residence`
   ADD KEY `street_address_index` (`street_address`);
 
 --
--- Indexes for table `treatment`
+-- Indexes for table `user_permission`
 --
-ALTER TABLE `treatment`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `user_permission`
+  ADD PRIMARY KEY (`user_id`,`permission_id`),
+  ADD KEY `user_permission_permission` (`permission_id`);
 
 --
 -- Indexes for table `user_session`
@@ -268,6 +277,12 @@ ALTER TABLE `organisation_user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `permission`
+--
+ALTER TABLE `permission`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `reminder`
 --
 ALTER TABLE `reminder`
@@ -280,16 +295,10 @@ ALTER TABLE `residence`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `treatment`
---
-ALTER TABLE `treatment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
 -- AUTO_INCREMENT for table `user_session`
 --
 ALTER TABLE `user_session`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- Constraints for dumped tables
@@ -303,13 +312,6 @@ ALTER TABLE `animal`
   ADD CONSTRAINT `animal_residence` FOREIGN KEY (`residence_id`) REFERENCES `residence` (`id`);
 
 --
--- Constraints for table `animal_treatment`
---
-ALTER TABLE `animal_treatment`
-  ADD CONSTRAINT `animal_treatment_animal` FOREIGN KEY (`animal_id`) REFERENCES `animal` (`id`),
-  ADD CONSTRAINT `animal_treatment_treatment` FOREIGN KEY (`treatment_id`) REFERENCES `treatment` (`id`);
-
---
 -- Constraints for table `organisation_user`
 --
 ALTER TABLE `organisation_user`
@@ -321,6 +323,13 @@ ALTER TABLE `organisation_user`
 ALTER TABLE `reminder`
   ADD CONSTRAINT `reminder_animal` FOREIGN KEY (`animal_id`) REFERENCES `animal` (`id`),
   ADD CONSTRAINT `reminder_user` FOREIGN KEY (`user_id`) REFERENCES `organisation_user` (`id`);
+
+--
+-- Constraints for table `user_permission`
+--
+ALTER TABLE `user_permission`
+  ADD CONSTRAINT `user_permission_permission` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`),
+  ADD CONSTRAINT `user_permission_user` FOREIGN KEY (`user_id`) REFERENCES `organisation_user` (`id`);
 
 --
 -- Constraints for table `user_session`
