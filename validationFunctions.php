@@ -4,7 +4,7 @@ include './databaseFunctions.php';
 
 function validateRequestMethod($validMethod = 'POST') {
   if (strcasecmp($_SERVER['REQUEST_METHOD'], $validMethod) != 0) {
-    throw new Exception('Request method must be '.$validMethod.'!');
+    throw new Exception('Request method must be '.$validMethod.'.');
   }
 }
 
@@ -101,12 +101,97 @@ function getBearerToken() {
  * Gets, validates and returns the user session from the request.
  * If there isn't one, or if it's invalid, an exception will be thrown.
  **/
-function validateAndReturnSessionToken() {
+function validateAndReturnSessionToken($updateSession = false, $sessionDurationMinutes = 180) {
     // Check if there is a bearer token
     if ($token = getBearerToken()) {
 
+        // Check is the token actually exists in the system.
+        $dbConnection = getDBConnection();
+
+        // If everything has been validated thus far, check if the user session exists.
+        if ($stmt = mysqli_prepare($dbConnection, 'SELECT us.user_id,
+            TIMESTAMPDIFF(MINUTE, us.date_updated, NOW()) AS DateDiff
+            FROM user_session us
+            WHERE us.token = ?')) {
+
+            mysqli_stmt_bind_param($stmt, "s", $token);
+
+            mysqli_stmt_execute($stmt);
+
+            /* bind variables to prepared statement */
+            mysqli_stmt_bind_result($stmt, $userID, $minutesSinceUpdate);
+
+            /* fetch values */
+            if (mysqli_stmt_fetch($stmt)) {
+                /* close statement */
+                mysqli_stmt_close($stmt);
+
+                // The session exists, is it still valid, and is it the most recent session?
+                if ($minutesSinceUpdate > $sessionDurationMinutes) {
+                    throw new Exception("User session expired.");
+                } else {
+                    // If everything has been validated thus far, check if the user session exists.
+                    if ($stmt = mysqli_prepare($dbConnection, 'SELECT us.token
+                        FROM user_session us
+                        WHERE us.user_id = ?
+                        ORDER BY us.date_updated DESC
+                        LIMIT 1')) {
+
+                        mysqli_stmt_bind_param($stmt, "i", $userID);
+
+                        mysqli_stmt_execute($stmt);
+
+                        /* bind variables to prepared statement */
+                        mysqli_stmt_bind_result($stmt, $latestToken);
+
+                        /* fetch values */
+                        if (mysqli_stmt_fetch($stmt)) {
+                            /* close statement */
+                            mysqli_stmt_close($stmt);
+
+                            // Check that the latest user token matches the one we got from the app.
+                            if ($latestToken == $token) {
+
+                                if ($updateSession) {
+                                    // update the session
+                                    updateSession($token);
+                                }
+
+                                return $token;
+                            } else {
+                                throw new Exception("Expired user session.");
+                            }
+                        } else {
+                            throw new Exception("Invalid user.");
+                        }
+                    } else {
+                        throw new Exception("Database exception, contact an administrator.");
+                    }
+                }
+            } else {
+                throw new Exception("Invalid user session.");
+            }
+        } else {
+            throw new Exception("Database exception, contact an administrator.");
+        }
+
     } else {
         throw new Exception("No user token found.");
+    }
+}
+
+function updateSession($sessionToken) {
+    $dbConnection = getDBConnection();
+
+    if ($stmt = mysqli_prepare($dbConnection, 'UPDATE user_session
+        SET date_updated = NOW()
+        WHERE token = ?')) {
+
+        mysqli_stmt_bind_param($stmt, "s", $sessionToken);
+
+        mysqli_stmt_execute($stmt);
+    } else {
+        throw new Exception("Database exception, contact an administrator.");
     }
 }
 
