@@ -1,0 +1,12 @@
+1. Animals
+- List
+- Add/Edit
+
+2. Residences
+- List
+- Add/Edit
+
+3. Reminders
+- List
+- Add/Edit
+- Create task to run reminders

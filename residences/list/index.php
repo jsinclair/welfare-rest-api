@@ -29,7 +29,27 @@ try {
 
 if ($responseCode == 200) {
     try {
-        $query = 'SELECT r.id, r.shack_id, r.street_address, r.latitude, r.longitude
+        $locationStuff = [];
+        $dist = 10;
+        $myLat = -34.088169;
+        $myLon = 18.848263;
+        $locationStuff['myLat'] = $myLat;
+        $locationStuff['myLon'] = $myLon;
+        $locationStuff['dist'] = $dist;
+        // calculate lon and lat for the rectangle:
+        $lon1 = $myLon - $dist / abs(cos(deg2rad($myLat)) * 111);
+        $lon2 = $myLon + $dist / abs(cos(deg2rad($myLat)) * 111);
+        $lat1 = $myLat - ($dist / 111);
+        $lat2 = $myLat + ($dist / 111);
+        $locationStuff['lon1'] = $lon1;
+        $locationStuff['lon2'] = $lon2;
+        $locationStuff['lat1'] = $lat1;
+        $locationStuff['lat2'] = $lat2;
+
+        $data['locationStuff'] = $locationStuff;
+
+        $query = 'SELECT r.id, r.shack_id, r.street_address, r.latitude, r.longitude,
+            6366.564864 * 2 * ASIN(SQRT( POWER(SIN(('.$myLat.' -r.latitude) * pi()/180 / 2), 2) +COS('.$myLat.' * pi()/180) * COS(r.latitude * pi()/180) *POWER(SIN(('.$myLon.' -r.longitude) * pi()/180 / 2), 2) )) as distance
             FROM residence r';
         $hasFilters = false;
         $paramTypes = '';
@@ -68,7 +88,7 @@ if ($responseCode == 200) {
 
             /* bind variables to prepared statement */
             mysqli_stmt_bind_result($stmt, $residenceID, $shackID,
-                $streetAddress, $latitude, $longitude);
+                $streetAddress, $latitude, $longitude, $distance);
 
             $residences = [];
             /* fetch values */
@@ -80,7 +100,8 @@ if ($responseCode == 200) {
                     "shack_id"=>$shackID,
                     "street_address"=>$streetAddress,
                     "latitude"=>$latitude,
-                    "longitude"=>$longitude
+                    "longitude"=>$longitude,
+                    "distance"=>$distance
                 ]);
             }
 
