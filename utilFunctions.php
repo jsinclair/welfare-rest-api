@@ -7,7 +7,6 @@ function buildError($title, $detail) {
 function handleResponse($responseCode, $data, $errors) {
   http_response_code($responseCode);
   header('Content-type: application/json');
-
   // Build the result depending on the response code
   $result = array();
   if (400 <= $responseCode && $responseCode <= 599) {
