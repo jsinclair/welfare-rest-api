@@ -1,7 +1,5 @@
 <?PHP
-include 'databaseFunctions.php';
-
-echo "Hello, world.";
+require_once 'databaseFunctions.php';
 
 $dbConnection = getDBConnection();
 
@@ -22,9 +20,6 @@ if ($stmt = mysqli_prepare($dbConnection, 'SELECT * FROM organisation_user WHERE
   /* close statement */
   mysqli_stmt_close($stmt);
 }
-
-echo '<br/>';
-echo 'heyo ';
 
 $username = "jsincl4ir@gmail.com";
 $password = "password";

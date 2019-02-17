@@ -1,6 +1,6 @@
 <?php
 
-include './databaseFunctions.php';
+require_once 'databaseFunctions.php';
 
 function validateRequestMethod($validMethod = 'POST') {
   if (strcasecmp($_SERVER['REQUEST_METHOD'], $validMethod) != 0) {

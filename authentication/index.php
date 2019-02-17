@@ -1,8 +1,8 @@
 <?PHP
 
-include '../databaseFunctions.php';
-include '../utilFunctions.php';
-include '../validationFunctions.php';
+require_once '../databaseFunctions.php';
+require_once '../utilFunctions.php';
+require_once '../validationFunctions.php';
 
 $headers = apache_request_headers();
 
@@ -149,12 +149,6 @@ try {
 } catch (Exception $e) {
   $responseCode = 400;
   array_push($errors, buildError('Authentication Error', $e->getMessage()));
-} finally {
-  /* close statement */
-  mysqli_stmt_close($stmt);
-
-  /* close connection */
-  mysqli_close($dbConnection);
 }
 
 handleResponse($responseCode, $data, $errors);

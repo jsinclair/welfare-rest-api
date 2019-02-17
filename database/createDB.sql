@@ -13,6 +13,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `animal_welfare`
 --
+DROP DATABASE `animal_welfare`;
 CREATE DATABASE IF NOT EXISTS `animal_welfare` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `animal_welfare`;
 
@@ -124,6 +125,7 @@ CREATE TABLE `reminder` (
   `animal_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `reason` varchar(255) NOT NULL,
+	`disabled` BIT(1) NOT NULL DEFAULT b'0',
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

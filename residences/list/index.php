@@ -1,8 +1,8 @@
 <?PHP
 
-include '../../databaseFunctions.php';
-include '../../utilFunctions.php';
-include '../../validationFunctions.php';
+require_once '../../databaseFunctions.php';
+require_once '../../utilFunctions.php';
+require_once '../../validationFunctions.php';
 
 $headers = apache_request_headers();
 
@@ -31,8 +31,8 @@ if ($responseCode == 200) {
     try {
         $locationStuff = [];
         $dist = 10;
-        $myLat = -34.088169;
-        $myLon = 18.848263;
+        $myLat = $_GET['lat'];
+        $myLon = $_GET['lon'];
         $locationStuff['myLat'] = $myLat;
         $locationStuff['myLon'] = $myLon;
         $locationStuff['dist'] = $dist;
@@ -46,7 +46,7 @@ if ($responseCode == 200) {
         $locationStuff['lat1'] = $lat1;
         $locationStuff['lat2'] = $lat2;
 
-        $data['locationStuff'] = $locationStuff;
+        //$data['locationStuff'] = $locationStuff;
 
         $query = 'SELECT r.id, r.shack_id, r.street_address, r.latitude, r.longitude,
             6366.564864 * 2 * ASIN(SQRT( POWER(SIN(('.$myLat.' -r.latitude) * pi()/180 / 2), 2) +COS('.$myLat.' * pi()/180) * COS(r.latitude * pi()/180) *POWER(SIN(('.$myLon.' -r.longitude) * pi()/180 / 2), 2) )) as distance
