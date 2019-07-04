@@ -13,7 +13,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `animal_welfare`
 --
-DROP DATABASE `animal_welfare`;
+DROP DATABASE IF EXISTS `animal_welfare`;
 CREATE DATABASE IF NOT EXISTS `animal_welfare` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `animal_welfare`;
 
@@ -45,15 +45,6 @@ CREATE TABLE `animal_type` (
   `description` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `animal_type`
---
-
-INSERT INTO `animal_type` (`id`, `description`) VALUES
-(1, 'Dog'),
-(2, 'Cat'),
-(3, 'Donkey');
-
 -- --------------------------------------------------------
 
 --
@@ -64,13 +55,6 @@ CREATE TABLE `organisation` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `organisation`
---
-
-INSERT INTO `organisation` (`id`, `name`) VALUES
-(1, 'Base Organisation');
 
 -- --------------------------------------------------------
 
@@ -88,13 +72,6 @@ CREATE TABLE `organisation_user` (
   `firebase_token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `organisation_user`
---
-
-INSERT INTO `organisation_user` (`id`, `organisation_id`, `username`, `password`, `fullname`, `contact_number`, `firebase_token`) VALUES
-(1, 1, 'jsincl4ir@gmail.com', 'password', 'James Sinclair', '12345678', 'c7K5mwR7eU8:APA91bEo060-5u9UhgrYhRPYBkhZb7tnHPQpgaspzabibzPNvmMt_yZw9EBn4rTRs9s16UIlzEE6cN0-O_M2OJgl4l5G_Wu-fdcY635WJ_2fM2U1Ch0D2oYTkRhFLX2YjbSvPOTd-SGL');
-
 -- --------------------------------------------------------
 
 --
@@ -106,13 +83,6 @@ CREATE TABLE `permission` (
   `permission_key` varchar(10) NOT NULL,
   `description` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `permission`
---
-
-INSERT INTO `permission` (`id`, `permission_key`, `description`) VALUES
-(1, 'write', 'The user is allowed to edit animal and residence information.');
 
 -- --------------------------------------------------------
 
@@ -155,13 +125,6 @@ CREATE TABLE `user_permission` (
   `permission_id` int(11) NOT NULL,
   `date_added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `user_permission`
---
-
-INSERT INTO `user_permission` (`user_id`, `permission_id`, `date_added`) VALUES
-(1, 1, '2018-09-09 12:48:42');
 
 -- --------------------------------------------------------
 
