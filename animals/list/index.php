@@ -38,7 +38,8 @@ if ($responseCode == 200) {
       $paramTypes = '';
       $params = [];
 
-      if ($animalType = $_GET['animal_type_id']) {
+      if (isset($_GET["animal_type_id"])) {
+          $animalType = $_GET['animal_type_id'];
           $query = $query.' WHERE at.id = ?';
 
           $paramTypes = $paramTypes.'i';
@@ -46,7 +47,8 @@ if ($responseCode == 200) {
           array_push($params, $animalType);
       }
 
-      if ($name = $_GET['name']) {
+      if (isset($_GET["name"])) {
+          $name = $_GET['name'];
           if ($hasFilters) {
               $query = $query.' AND a.name LIKE ?';
           } else {
@@ -55,7 +57,7 @@ if ($responseCode == 200) {
 
           $paramTypes = $paramTypes.'s';
           $hasFilters = true;
-          array_push($params, '%'.$streetAddress.'%');
+          array_push($params, '%'.$name.'%');
       }
 
       $dbConnection = getDBConnection();
@@ -65,7 +67,9 @@ if ($responseCode == 200) {
       // If everything has been validated thus far, check if the user session exists.
       if ($stmt = mysqli_prepare($dbConnection, $query)) {
 
-          mysqli_stmt_bind_param($stmt, $paramTypes, ...$params);
+          if (count($params) > 0) {
+              mysqli_stmt_bind_param($stmt, $paramTypes, ...$params);
+          }
 
           mysqli_stmt_execute($stmt);
 

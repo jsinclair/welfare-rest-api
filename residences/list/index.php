@@ -54,8 +54,8 @@ if ($responseCode == 200) {
         $hasFilters = false;
         $paramTypes = '';
         $params = [];
-
-        if ($shackId = $_GET['shack_id']) {
+        if (isset($_GET["shack_id"])) {
+            $shackId = $_GET['shack_id'];
             $query = $query.' WHERE r.shack_id = ?';
 
             $paramTypes = $paramTypes.'s';
@@ -63,7 +63,8 @@ if ($responseCode == 200) {
             array_push($params, $shackId);
         }
 
-        if ($streetAddress = $_GET['street_address']) {
+        if (isset($_GET["street_address"])) {
+            $streetAddress = $_GET['street_address'];
             if ($hasFilters) {
                 $query = $query.' AND r.street_address LIKE ?';
             } else {
@@ -82,7 +83,9 @@ if ($responseCode == 200) {
         // If everything has been validated thus far, check if the user session exists.
         if ($stmt = mysqli_prepare($dbConnection, $query)) {
 
-            mysqli_stmt_bind_param($stmt, $paramTypes, ...$params);
+            if (count($params) > 0) {
+                mysqli_stmt_bind_param($stmt, $paramTypes, ...$params);
+            }
 
             mysqli_stmt_execute($stmt);
 
