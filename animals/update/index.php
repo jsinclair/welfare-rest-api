@@ -51,7 +51,8 @@ if ($responseCode == 200) {
         $welfareNumber = $decodedJSON['welfare_number'];
         $treatments = $decodedJSON['treatments'];
 
-        if ($animalID = $decodedJSON['animal_id']) {
+        if (isset($decodedJSON["animal_id"])) {
+          $animalID = $decodedJSON['animal_id'];
           $query = "UPDATE animal SET animal_type_id = ?,
               residence_id = ?,
               name = ?,

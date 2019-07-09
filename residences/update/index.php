@@ -48,7 +48,8 @@ if ($responseCode == 200) {
         $longitude = $decodedJSON['longitude'];
         $notes = $decodedJSON['notes'];
 
-        if ($residenceID = $decodedJSON['residence_id']) {
+        if (isset($decodedJSON["residence_id"])) {
+          $residenceID = $decodedJSON['residence_id'];
           $query = "UPDATE residence SET shack_id = ?,
               street_address = ?,
               latitude = ?,
