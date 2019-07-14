@@ -49,8 +49,10 @@ if ($responseCode == 200) {
         //$data['locationStuff'] = $locationStuff;
 
         $query = 'SELECT r.id, r.shack_id, r.street_address, r.latitude, r.longitude,
-            6366.564864 * 2 * ASIN(SQRT( POWER(SIN(('.$myLat.' -r.latitude) * pi()/180 / 2), 2) +COS('.$myLat.' * pi()/180) * COS(r.latitude * pi()/180) *POWER(SIN(('.$myLon.' -r.longitude) * pi()/180 / 2), 2) )) as distance
-            FROM residence r';
+            6366.564864 * 2 * ASIN(SQRT( POWER(SIN(('.$myLat.' -r.latitude) * pi()/180 / 2), 2) +COS('.$myLat.' * pi()/180) * COS(r.latitude * pi()/180) *POWER(SIN(('.$myLon.' -r.longitude) * pi()/180 / 2), 2) )) as distance,
+            IFNULL(GROUP_CONCAT(a.NAME ORDER BY a.NAME ASC SEPARATOR \', \'), \'\') as animals
+            FROM residence r
+            LEFT JOIN animal a ON a.residence_id = r.id';
         $hasFilters = false;
         $paramTypes = '';
         $params = [];
@@ -78,6 +80,7 @@ if ($responseCode == 200) {
 
         $dbConnection = getDBConnection();
 
+        $query = $query.' GROUP BY r.id';
         $query = $query.' LIMIT 25';
 
         // If everything has been validated thus far, check if the user session exists.
@@ -91,7 +94,7 @@ if ($responseCode == 200) {
 
             /* bind variables to prepared statement */
             mysqli_stmt_bind_result($stmt, $residenceID, $shackID,
-                $streetAddress, $latitude, $longitude, $distance);
+                $streetAddress, $latitude, $longitude, $distance, $animals);
 
             $residences = [];
             /* fetch values */
@@ -104,7 +107,8 @@ if ($responseCode == 200) {
                     "street_address"=>$streetAddress,
                     "latitude"=>$latitude,
                     "longitude"=>$longitude,
-                    "distance"=>$distance
+                    "distance"=>$distance,
+                    "animals"=>$animals
                 ]);
             }
 
