@@ -328,7 +328,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"animal_type_id\":3,\n\t\"residence_id\":1,\n\t\"name\":\"Post Test\",\n\t\"approximate_dob\":\"2019/02/20\",\n\t\"notes\":\"Post Note\",\n\t\"welfare_number\":\"Wel1\",\n\t\"treatments\":\"All the treatments\"\n}"
+					"raw": "{\n\t\"animal_id\":7,\n\t\"animal_type_id\":3,\n\t\"residence_id\":1,\n\t\"name\":\"Katie\",\n\t\"approximate_dob\":\"2019/02/20\",\n\t\"notes\":\"Post Note\",\n\t\"welfare_number\":\"Wel1\",\n\t\"treatments\":\"All the treatments\"\n}"
 				},
 				"url": {
 					"raw": "{{baseURL}}welfare-rest-api/animals/update/",
@@ -341,6 +341,68 @@
 						""
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Animal Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{welfareSessionToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}welfare-rest-api/animals/details?animal_id=3",
+					"host": [
+						"{{baseURL}}welfare-rest-api"
+					],
+					"path": [
+						"animals",
+						"details"
+					],
+					"query": [
+						{
+							"key": "animal_id",
+							"value": "3"
+						}
+					]
+				},
+				"description": "Load the details of a given animal ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Residence Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{welfareSessionToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}welfare-rest-api/residences/details?residence_id=1",
+					"host": [
+						"{{baseURL}}welfare-rest-api"
+					],
+					"path": [
+						"residences",
+						"details"
+					],
+					"query": [
+						{
+							"key": "residence_id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Load the details of a given animal ID"
 			},
 			"response": []
 		}
