@@ -31,7 +31,7 @@ if ($responseCode == 200) {
     try {
 
       $query = 'SELECT a.id, a.animal_type_id, at.description, a.name,
-        a.approximate_dob, a.notes, a.welfare_number, a.treatments
+        a.approximate_dob, a.welfare_number
         FROM animal a
         JOIN animal_type at ON at.id = a.animal_type_id';
       $hasFilters = false;
@@ -75,8 +75,8 @@ if ($responseCode == 200) {
 
           /* bind variables to prepared statement */
           mysqli_stmt_bind_result($stmt, $animalID, $animalTypeID,
-              $description, $name, $approximateDOB, $notes,
-              $welfareNumber, $treatments);
+              $description, $name, $approximateDOB,
+              $welfareNumber);
 
           $animals = [];
           /* fetch values */
@@ -87,11 +87,9 @@ if ($responseCode == 200) {
                   "id"=>$animalID,
                   "animal_type_id"=>$animalTypeID,
                   "description"=>$description,
-                  "name"=>$name,
                   "approximate_dob"=>$approximateDOB,
                   "notes"=>$notes,
-                  "welfare_number"=>$welfareNumber,
-                  "treatments"=>$treatments
+                  "welfare_number"=>$welfareNumber
               ]);
           }
 
