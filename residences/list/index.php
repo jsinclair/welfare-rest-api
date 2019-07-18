@@ -29,27 +29,8 @@ try {
 
 if ($responseCode == 200) {
     try {
-        $locationStuff = [];
-        $dist = 10;
-        $myLat = $_GET['lat'];
-        $myLon = $_GET['lon'];
-        $locationStuff['myLat'] = $myLat;
-        $locationStuff['myLon'] = $myLon;
-        $locationStuff['dist'] = $dist;
-        // calculate lon and lat for the rectangle:
-        $lon1 = $myLon - $dist / abs(cos(deg2rad($myLat)) * 111);
-        $lon2 = $myLon + $dist / abs(cos(deg2rad($myLat)) * 111);
-        $lat1 = $myLat - ($dist / 111);
-        $lat2 = $myLat + ($dist / 111);
-        $locationStuff['lon1'] = $lon1;
-        $locationStuff['lon2'] = $lon2;
-        $locationStuff['lat1'] = $lat1;
-        $locationStuff['lat2'] = $lat2;
-
-        //$data['locationStuff'] = $locationStuff;
 
         $query = 'SELECT r.id, r.shack_id, r.street_address, r.latitude, r.longitude,
-            6366.564864 * 2 * ASIN(SQRT( POWER(SIN(('.$myLat.' -r.latitude) * pi()/180 / 2), 2) +COS('.$myLat.' * pi()/180) * COS(r.latitude * pi()/180) *POWER(SIN(('.$myLon.' -r.longitude) * pi()/180 / 2), 2) )) as distance,
             IFNULL(GROUP_CONCAT(a.NAME ORDER BY a.NAME ASC SEPARATOR \', \'), \'\') as animals
             FROM residence r
             LEFT JOIN animal a ON a.residence_id = r.id';
@@ -94,7 +75,7 @@ if ($responseCode == 200) {
 
             /* bind variables to prepared statement */
             mysqli_stmt_bind_result($stmt, $residenceID, $shackID,
-                $streetAddress, $latitude, $longitude, $distance, $animals);
+                $streetAddress, $latitude, $longitude, $animals);
 
             $residences = [];
             /* fetch values */
@@ -107,7 +88,6 @@ if ($responseCode == 200) {
                     "street_address"=>$streetAddress,
                     "latitude"=>$latitude,
                     "longitude"=>$longitude,
-                    "distance"=>$distance,
                     "animals"=>$animals
                 ]);
             }
