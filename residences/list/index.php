@@ -30,7 +30,8 @@ try {
 if ($responseCode == 200) {
     try {
 
-        $query = 'SELECT r.id, r.shack_id, r.street_address, r.latitude, r.longitude,
+        $query = 'SELECT r.id, IFNULL(r.shack_id, \'\') as shack_id,
+            IFNULL(r.street_address, \'\') as street_address, r.latitude, r.longitude,
             IFNULL(GROUP_CONCAT(a.NAME ORDER BY a.NAME ASC SEPARATOR \', \'), \'\') as animals
             FROM residence r
             LEFT JOIN animal a ON a.residence_id = r.id';

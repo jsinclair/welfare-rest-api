@@ -44,7 +44,8 @@ if ($responseCode == 200) {
 if ($responseCode == 200) {
     try {
 
-      $query = 'SELECT r.shack_id, r.street_address, r.latitude, r.longitude, r.notes
+      $query = 'SELECT IFNULL(r.shack_id, \'\') as shack_id,
+          IFNULL(r.street_address, \'\') as street_address, r.latitude, r.longitude, r.notes
         FROM residence r
         WHERE r.id = ?';
       $paramTypes = 'i';
