@@ -31,14 +31,15 @@ if ($responseCode == 200) {
     try {
 
       $query = 'SELECT a.id, a.animal_type_id, at.description, a.name,
-        a.approximate_dob, a.notes, a.welfare_number, a.treatments
+        a.approximate_dob, a.welfare_number
         FROM animal a
         JOIN animal_type at ON at.id = a.animal_type_id';
       $hasFilters = false;
       $paramTypes = '';
       $params = [];
 
-      if ($animalType = $_GET['animal_type_id']) {
+      if (isset($_GET["animal_type_id"])) {
+          $animalType = $_GET['animal_type_id'];
           $query = $query.' WHERE at.id = ?';
 
           $paramTypes = $paramTypes.'i';
@@ -46,7 +47,8 @@ if ($responseCode == 200) {
           array_push($params, $animalType);
       }
 
-      if ($name = $_GET['name']) {
+      if (isset($_GET["name"])) {
+          $name = $_GET['name'];
           if ($hasFilters) {
               $query = $query.' AND a.name LIKE ?';
           } else {
@@ -55,7 +57,7 @@ if ($responseCode == 200) {
 
           $paramTypes = $paramTypes.'s';
           $hasFilters = true;
-          array_push($params, '%'.$streetAddress.'%');
+          array_push($params, '%'.$name.'%');
       }
 
       $dbConnection = getDBConnection();
@@ -65,14 +67,16 @@ if ($responseCode == 200) {
       // If everything has been validated thus far, check if the user session exists.
       if ($stmt = mysqli_prepare($dbConnection, $query)) {
 
-          mysqli_stmt_bind_param($stmt, $paramTypes, ...$params);
+          if (count($params) > 0) {
+              mysqli_stmt_bind_param($stmt, $paramTypes, ...$params);
+          }
 
           mysqli_stmt_execute($stmt);
 
           /* bind variables to prepared statement */
           mysqli_stmt_bind_result($stmt, $animalID, $animalTypeID,
-              $description, $name, $approximateDOB, $notes,
-              $welfareNumber, $treatments);
+              $description, $name, $approximateDOB,
+              $welfareNumber);
 
           $animals = [];
           /* fetch values */
@@ -83,11 +87,9 @@ if ($responseCode == 200) {
                   "id"=>$animalID,
                   "animal_type_id"=>$animalTypeID,
                   "description"=>$description,
-                  "name"=>$name,
                   "approximate_dob"=>$approximateDOB,
                   "notes"=>$notes,
-                  "welfare_number"=>$welfareNumber,
-                  "treatments"=>$treatments
+                  "welfare_number"=>$welfareNumber
               ]);
           }
 
