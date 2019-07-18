@@ -75,6 +75,38 @@ if ($responseCode == 200) {
                   "longitude"=>$longitude,
                   "notes"=>$notes
               ];
+
+              mysqli_stmt_close($stmt);
+
+              // Select the animals for the residence
+              if ($stmt = mysqli_prepare($dbConnection, 'SELECT a.id, a.name, a.welfare_number
+                    FROM animal a
+                    WHERE a.residence_id = ?')) {
+
+                  // Bind the insert values
+                  mysqli_stmt_bind_param($stmt, "i", $residenceID);
+
+                  mysqli_stmt_execute($stmt);
+
+                  /* bind variables to prepared statement */
+                  mysqli_stmt_bind_result($stmt, $animalID, $animalName,
+                    $animalWelfareNumber);
+
+                  $animals = [];
+                  /* fetch values, build up animal type list */
+                  while (mysqli_stmt_fetch($stmt)) {
+                      array_push($animals, [
+                          "id"=>$animalID,
+                          "name"=>$animalName,
+                          "welfare_number"=>$animalWelfareNumber,
+                      ]);
+                  }
+
+                  /* close statement */
+                  mysqli_stmt_close($stmt);
+
+                  $details["animals"] = $animals;
+              }
           }
 
           $data['residence_details'] = $details;
