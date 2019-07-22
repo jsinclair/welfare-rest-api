@@ -1,12 +1,5 @@
 0.1. General
 - Handle Failed Login
 
-1. Animals
-- Add/Edit
-
-2. Residences
-- Add/Edit
-
-3. Reminders
-- Add/Edit
-- Create task to run reminders
+1.0 Admin
+- Add and remove animals to/from residences
