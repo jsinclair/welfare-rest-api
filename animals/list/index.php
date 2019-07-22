@@ -60,6 +60,19 @@ if ($responseCode == 200) {
           array_push($params, '%'.$name.'%');
       }
 
+      if (isset($_GET["welfare_number"])) {
+          $welfareNumber = $_GET['welfare_number'];
+          if ($hasFilters) {
+              $query = $query.' AND a.welfare_number LIKE ?';
+          } else {
+              $query = $query.' WHERE a.welfare_number LIKE ?';
+          }
+
+          $paramTypes = $paramTypes.'s';
+          $hasFilters = true;
+          array_push($params, '%'.$welfareNumber.'%');
+      }
+
       $dbConnection = getDBConnection();
 
       $query = $query.' LIMIT 25';
@@ -86,9 +99,9 @@ if ($responseCode == 200) {
               array_push($animals, [
                   "id"=>$animalID,
                   "animal_type_id"=>$animalTypeID,
+                  "name"=>$name,
                   "description"=>$description,
                   "approximate_dob"=>$approximateDOB,
-                  "notes"=>$notes,
                   "welfare_number"=>$welfareNumber
               ]);
           }

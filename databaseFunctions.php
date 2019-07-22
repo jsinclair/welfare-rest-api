@@ -1,7 +1,7 @@
 <?php
 
 function getDBConnection() { //function parameters, two variables.
-  $con = mysqli_connect("localhost", "root", "root", "animal_welfare");
+  $con = mysqli_connect("localhost", "root", "", "animal_welfare");
 
   // Check connection
   if (mysqli_connect_errno()) {
