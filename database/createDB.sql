@@ -26,7 +26,7 @@ USE `animal_welfare`;
 CREATE TABLE `animal` (
   `id` int(11) NOT NULL,
   `animal_type_id` int(11) NOT NULL,
-  `residence_id` int(11) NOT NULL,
+  `residence_id` int(11) NULL,
   `name` varchar(100) NOT NULL,
   `approximate_dob` date DEFAULT NULL COMMENT 'Set when the users sends the approximate age through.',
   `notes` text NOT NULL,

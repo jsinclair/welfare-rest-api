@@ -11,6 +11,8 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+USE `animal_welfare`;
+
 -- Dumping data for table animal_welfare.animal_type: ~3 rows (approximately)
 DELETE FROM `animal_type`;
 /*!40000 ALTER TABLE `animal_type` DISABLE KEYS */;

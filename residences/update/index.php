@@ -48,8 +48,35 @@ if ($responseCode == 200) {
         $longitude = $decodedJSON['longitude'];
         $notes = $decodedJSON['notes'];
 
+        $insert = false;
+
         if (isset($decodedJSON["residence_id"])) {
           $residenceID = $decodedJSON['residence_id'];
+
+          // If we are updating a residence, clear any animals associated with it
+          $query = "UPDATE animal SET residence_id = NULL
+              WHERE residence_id = ?";
+          $paramTypes = 'i';
+          $params = [$residenceID];
+
+          $dbConnection = getDBConnection();
+
+          if ($stmt = mysqli_prepare($dbConnection, $query)) {
+
+              mysqli_stmt_bind_param($stmt, $paramTypes, ...$params);
+
+              if (mysqli_stmt_execute($stmt)) {
+                  $data['message'] = $message;
+              } else {
+                  throw new Exception("Database exception, contact an administrator.");
+              }
+
+              /* close statement */
+              mysqli_stmt_close($stmt);
+          } else {
+              throw new Exception("Database exception, contact an administrator.");
+          }
+
           $query = "UPDATE residence SET shack_id = ?,
               street_address = ?,
               latitude = ?,
@@ -67,6 +94,8 @@ if ($responseCode == 200) {
             $params = [$shackID, $streetAddress, $latitude,
               $longitude, $notes];
             $message = "Residence Added";
+
+            $insert = true;
         }
 
         $dbConnection = getDBConnection();
@@ -77,6 +106,10 @@ if ($responseCode == 200) {
 
             if (mysqli_stmt_execute($stmt)) {
                 $data['message'] = $message;
+
+                if ($insert) {
+                    $residenceID = mysqli_insert_id($dbConnection);
+                }
             } else {
                 throw new Exception("Database exception, contact an administrator.");
             }
@@ -85,6 +118,37 @@ if ($responseCode == 200) {
             mysqli_stmt_close($stmt);
         } else {
             throw new Exception("Database exception, contact an administrator.");
+        }
+
+        // Update the animals assigned to this residence
+        if (isset($decodedJSON["animals"])) {
+            $animalIDs = $decodedJSON["animals"];
+            $count = count($animalIDs);
+
+            if ($count > 0) {
+                $placeholders = implode(',', array_fill(0, $count, '?'));
+                $bindStr = str_repeat('i', $count);
+                $query = "UPDATE animal SET residence_id = ?
+                    WHERE id IN ($placeholders)";
+                $bindStr = $bindStr.'i';
+                array_unshift($animalIDs, $residenceID);
+                $dbConnection = getDBConnection();
+
+                if ($stmt = mysqli_prepare($dbConnection, $query)) {
+
+                    mysqli_stmt_bind_param($stmt, $bindStr, ...$animalIDs);
+
+                    if (mysqli_stmt_execute($stmt)) {
+                        //$data['message'] = $message;
+                    } else {
+                        throw new Exception("Database exception, contact an administrator.");
+                    }
+
+                    mysqli_stmt_close($stmt);
+                } else {
+                    throw new Exception("Database exception, contact an administrator.");
+                }
+            }
         }
 
     } catch(Exception $e) {
