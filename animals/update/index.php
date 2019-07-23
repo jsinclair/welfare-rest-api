@@ -32,7 +32,7 @@ try {
 if ($responseCode == 200) {
   try {
     validateJSONObject($decodedJSON,
-      ['animal_type_id', 'residence_id', 'name', 'approximate_dob', 'notes',
+      ['animal_type_id', 'name', 'approximate_dob', 'notes',
         'welfare_number', 'treatments'], true);
   } catch(Exception $e) {
     $responseCode = 400;
