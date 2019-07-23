@@ -1,10 +1,426 @@
 {
 	"info": {
-		"_postman_id": "7d2e7058-377d-42a3-87ae-0754620da3bb",
+		"_postman_id": "3417446b-3033-48c9-9343-865d8327cb91",
 		"name": "Welfare Local",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Animals",
+			"item": [
+				{
+					"name": "List Animals",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/animals/list/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"animals",
+								"list",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Animal",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"animal_id\":7,\n\t\"animal_type_id\":3,\n\t\"residence_id\":1,\n\t\"name\":\"Katie\",\n\t\"approximate_dob\":\"2019/02/20\",\n\t\"notes\":\"Post Note\",\n\t\"welfare_number\":\"Wel1\",\n\t\"treatments\":\"All the treatments\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/animals/update/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"animals",
+								"update",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Animal Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/animals/details?animal_id=3",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"animals",
+								"details"
+							],
+							"query": [
+								{
+									"key": "animal_id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "Load the details of a given animal ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Animal",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"animal_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/animals/delete/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"animals",
+								"delete",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Residences",
+			"item": [
+				{
+					"name": "List Residences",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/residences/list/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"residences",
+								"list",
+								""
+							]
+						},
+						"description": "Searches residences based on given parameters."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Residence",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"residence_id\":5,\n\t\"shack_id\":\"56\",\n\t\"street_address\":\"1 test street\",\n\t\"latitude\":55.5555,\n\t\"longitude\":55.5555,\n\t\"notes\":\"test notes\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/residences/update/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"residences",
+								"update",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Residence Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/residences/details?residence_id=3",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"residences",
+								"details"
+							],
+							"query": [
+								{
+									"key": "residence_id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "Load the details of a given animal ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Residence",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{welfareSessionToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"residence_id\": 5\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/residences/delete/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"residences",
+								"delete",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reminders",
+			"item": [
+				{
+					"name": "Messenger",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/messenger/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"messenger",
+								""
+							]
+						},
+						"description": "Sends notifications via FCM"
+					},
+					"response": []
+				},
+				{
+					"name": "List Reminders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/reminders/list/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"reminders",
+								"list",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Firebase",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firebase_token\": \"12345\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/update_firebase/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"update_firebase",
+								""
+							]
+						},
+						"description": "POST to update a user's Firebase token."
+					},
+					"response": []
+				},
+				{
+					"name": "Disable Reminder",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"reminder_id\":1\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/reminders/delete/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"reminders",
+								"delete",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Reminder",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"reminder_id\":3,\n\t\"animal_id\":1,\n\t\"reason\":\"Post Test\",\n\t\"date\":\"2019/02/20\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/reminders/update/",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"reminders",
+								"update",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Authentication",
 			"event": [
@@ -43,8 +459,7 @@
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"disabled": false
+						"value": "application/json"
 					}
 				],
 				"body": {
@@ -62,347 +477,6 @@
 					]
 				},
 				"description": "Login request for the welfare system."
-			},
-			"response": []
-		},
-		{
-			"name": "Update Firebase",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer {{welfareSessionToken}}"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"firebase_token\": \"12345\"\n}"
-				},
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/update_firebase/",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"update_firebase",
-						""
-					]
-				},
-				"description": "POST to update a user's Firebase token."
-			},
-			"response": []
-		},
-		{
-			"name": "Messenger",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/messenger/",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"messenger",
-						""
-					]
-				},
-				"description": "Sends notifications via FCM"
-			},
-			"response": []
-		},
-		{
-			"name": "List Residences",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{welfareSessionToken}}"
-					}
-				],
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/residences/list/?lat=-34.158124&lon=18.984279",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"residences",
-						"list",
-						""
-					],
-					"query": [
-						{
-							"key": "lat",
-							"value": "-34.158124"
-						},
-						{
-							"key": "lon",
-							"value": "18.984279"
-						}
-					]
-				},
-				"description": "Searches residences based on given parameters."
-			},
-			"response": []
-		},
-		{
-			"name": "List Animals",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{welfareSessionToken}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/animals/list/",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"animals",
-						"list",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "List Reminders",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{welfareSessionToken}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/reminders/list/",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"reminders",
-						"list",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Residence",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{welfareSessionToken}}",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"residence_id\":5,\n\t\"shack_id\":\"56\",\n\t\"street_address\":\"1 test street\",\n\t\"latitude\":55.5555,\n\t\"longitude\":55.5555,\n\t\"notes\":\"test notes\"\n}"
-				},
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/residences/update/",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"residences",
-						"update",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Disable Reminder",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer {{welfareSessionToken}}",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"reminder_id\":1\n}"
-				},
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/reminders/delete/",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"reminders",
-						"delete",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Reminder",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{welfareSessionToken}}",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"reminder_id\":3,\n\t\"animal_id\":1,\n\t\"reason\":\"Post Test\",\n\t\"date\":\"2019/02/20\"\n}"
-				},
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/reminders/update/",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"reminders",
-						"update",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Animal",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{welfareSessionToken}}",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"animal_id\":7,\n\t\"animal_type_id\":3,\n\t\"residence_id\":1,\n\t\"name\":\"Katie\",\n\t\"approximate_dob\":\"2019/02/20\",\n\t\"notes\":\"Post Note\",\n\t\"welfare_number\":\"Wel1\",\n\t\"treatments\":\"All the treatments\"\n}"
-				},
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/animals/update/",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"animals",
-						"update",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Animal Details",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{welfareSessionToken}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/animals/details?animal_id=3",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"animals",
-						"details"
-					],
-					"query": [
-						{
-							"key": "animal_id",
-							"value": "3"
-						}
-					]
-				},
-				"description": "Load the details of a given animal ID"
-			},
-			"response": []
-		},
-		{
-			"name": "Residence Details",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{welfareSessionToken}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{baseURL}}welfare-rest-api/residences/details?residence_id=1",
-					"host": [
-						"{{baseURL}}welfare-rest-api"
-					],
-					"path": [
-						"residences",
-						"details"
-					],
-					"query": [
-						{
-							"key": "residence_id",
-							"value": "1"
-						}
-					]
-				},
-				"description": "Load the details of a given animal ID"
 			},
 			"response": []
 		}
