@@ -31,7 +31,8 @@ CREATE TABLE `animal` (
   `approximate_dob` date DEFAULT NULL COMMENT 'Set when the users sends the approximate age through.',
   `notes` text NOT NULL,
   `welfare_number` varchar(15) DEFAULT NULL,
-  `treatments` text NOT NULL
+  `treatments` text NOT NULL,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -95,7 +96,7 @@ CREATE TABLE `reminder` (
   `animal_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `reason` varchar(255) NOT NULL,
-	`disabled` BIT(1) NOT NULL DEFAULT b'0',
+  `disabled` BIT(1) NOT NULL DEFAULT b'0',
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -111,7 +112,8 @@ CREATE TABLE `residence` (
   `street_address` varchar(255) DEFAULT NULL,
   `latitude` double NOT NULL,
   `longitude` double NOT NULL,
-  `notes` text
+  `notes` text,
+  `deleted` BIT(1) NOT NULL DEFAULT b'0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

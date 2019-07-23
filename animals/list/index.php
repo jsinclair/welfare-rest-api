@@ -33,43 +33,32 @@ if ($responseCode == 200) {
       $query = 'SELECT a.id, a.animal_type_id, at.description, a.name,
         a.approximate_dob, a.welfare_number
         FROM animal a
-        JOIN animal_type at ON at.id = a.animal_type_id';
-      $hasFilters = false;
+        JOIN animal_type at ON at.id = a.animal_type_id
+        WHERE a.deleted = 0';
       $paramTypes = '';
       $params = [];
 
       if (isset($_GET["animal_type_id"])) {
           $animalType = $_GET['animal_type_id'];
-          $query = $query.' WHERE at.id = ?';
+          $query = $query.' AND at.id = ?';
 
           $paramTypes = $paramTypes.'i';
-          $hasFilters = true;
           array_push($params, $animalType);
       }
 
       if (isset($_GET["name"])) {
           $name = $_GET['name'];
-          if ($hasFilters) {
-              $query = $query.' AND a.name LIKE ?';
-          } else {
-              $query = $query.' WHERE a.name LIKE ?';
-          }
+          $query = $query.' AND a.name LIKE ?';
 
           $paramTypes = $paramTypes.'s';
-          $hasFilters = true;
           array_push($params, '%'.$name.'%');
       }
 
       if (isset($_GET["welfare_number"])) {
           $welfareNumber = $_GET['welfare_number'];
-          if ($hasFilters) {
-              $query = $query.' AND a.welfare_number LIKE ?';
-          } else {
-              $query = $query.' WHERE a.welfare_number LIKE ?';
-          }
+          $query = $query.' AND a.welfare_number LIKE ?';
 
           $paramTypes = $paramTypes.'s';
-          $hasFilters = true;
           array_push($params, '%'.$welfareNumber.'%');
       }
 

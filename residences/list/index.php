@@ -34,29 +34,24 @@ if ($responseCode == 200) {
             IFNULL(r.street_address, \'\') as street_address, r.latitude, r.longitude,
             IFNULL(GROUP_CONCAT(a.NAME ORDER BY a.NAME ASC SEPARATOR \', \'), \'\') as animals
             FROM residence r
-            LEFT JOIN animal a ON a.residence_id = r.id';
-        $hasFilters = false;
+            LEFT JOIN animal a ON a.residence_id = r.id
+            WHERE r.deleted = 0
+            AND (a.deleted = 0 OR a.deleted IS NULL)';
         $paramTypes = '';
         $params = [];
         if (isset($_GET["shack_id"])) {
             $shackId = $_GET['shack_id'];
-            $query = $query.' WHERE r.shack_id = ?';
+            $query = $query.' AND r.shack_id = ?';
 
             $paramTypes = $paramTypes.'s';
-            $hasFilters = true;
             array_push($params, $shackId);
         }
 
         if (isset($_GET["street_address"])) {
             $streetAddress = $_GET['street_address'];
-            if ($hasFilters) {
-                $query = $query.' AND r.street_address LIKE ?';
-            } else {
-                $query = $query.' WHERE r.street_address LIKE ?';
-            }
+            $query = $query.' AND r.street_address LIKE ?';
 
             $paramTypes = $paramTypes.'s';
-            $hasFilters = true;
             array_push($params, '%'.$streetAddress.'%');
         }
 

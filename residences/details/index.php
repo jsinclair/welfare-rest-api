@@ -82,7 +82,8 @@ if ($responseCode == 200) {
               // Select the animals for the residence
               if ($stmt = mysqli_prepare($dbConnection, 'SELECT a.id, a.name, a.welfare_number
                     FROM animal a
-                    WHERE a.residence_id = ?')) {
+                    WHERE a.residence_id = ?
+                    AND a.deleted = 0')) {
 
                   // Bind the insert values
                   mysqli_stmt_bind_param($stmt, "i", $residenceID);
