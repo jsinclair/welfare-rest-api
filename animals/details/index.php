@@ -45,7 +45,7 @@ if ($responseCode == 200) {
     try {
 
       $query = 'SELECT a.animal_type_id, a.residence_id, a.name,
-        a.approximate_dob, a.notes, a.welfare_number, a.treatments,
+        IFNULL(a.approximate_dob, \'\') as approximate_dob, a.notes, a.welfare_number, a.treatments,
         r.street_address, r.shack_id
         FROM animal a
         LEFT JOIN residence r on r.id = a.residence_id

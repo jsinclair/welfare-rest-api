@@ -31,7 +31,7 @@ if ($responseCode == 200) {
     try {
 
       $query = 'SELECT a.id, a.animal_type_id, at.description, a.name,
-        a.approximate_dob, a.welfare_number
+        IFNULL(a.approximate_dob, \'\') as approximate_dob, a.welfare_number
         FROM animal a
         JOIN animal_type at ON at.id = a.animal_type_id
         WHERE a.deleted = 0';

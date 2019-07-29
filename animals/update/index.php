@@ -32,7 +32,7 @@ try {
 if ($responseCode == 200) {
   try {
     validateJSONObject($decodedJSON,
-      ['animal_type_id', 'name', 'approximate_dob', 'notes',
+      ['animal_type_id', 'name', 'notes',
         'welfare_number', 'treatments'], true);
   } catch(Exception $e) {
     $responseCode = 400;
@@ -50,6 +50,14 @@ if ($responseCode == 200) {
         $notes = $decodedJSON['notes'];
         $welfareNumber = $decodedJSON['welfare_number'];
         $treatments = $decodedJSON['treatments'];
+
+        // Validate the DOB, set to null if invalid
+        if ($approximateDOB != null) {
+            $d = DateTime::createFromFormat('Y-m-d', $approximateDOB);
+            if ($d == null || !($d->format($format) === $approximateDOB)) {
+                $approximateDOB = null;
+            }
+        }
 
         if (isset($decodedJSON["animal_id"])) {
           $animalID = $decodedJSON['animal_id'];
