@@ -54,7 +54,7 @@ if ($responseCode == 200) {
         // Validate the DOB, set to null if invalid
         if ($approximateDOB != null) {
             $d = DateTime::createFromFormat('Y-m-d', $approximateDOB);
-            if ($d == null || !($d->format($format) === $approximateDOB)) {
+            if ($d == null || !($d->format('Y-m-d') === $approximateDOB)) {
                 $approximateDOB = null;
             }
         }
