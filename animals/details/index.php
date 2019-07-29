@@ -45,8 +45,10 @@ if ($responseCode == 200) {
     try {
 
       $query = 'SELECT a.animal_type_id, a.residence_id, a.name,
-        a.approximate_dob, a.notes, a.welfare_number, a.treatments
+        a.approximate_dob, a.notes, a.welfare_number, a.treatments,
+        r.street_address, r.shack_id
         FROM animal a
+        LEFT JOIN residence r on r.id = a.residence_id
         WHERE a.id = ?';
       $paramTypes = 'i';
       $params = [$animalID];
@@ -63,16 +65,28 @@ if ($responseCode == 200) {
           mysqli_stmt_execute($stmt);
 
           mysqli_stmt_bind_result($stmt, $animalTypeID, $residenceID,
-              $name, $approximateDOB, $notes,
-              $welfareNumber, $treatments);
+              $name, $approximateDOB, $notes, $welfareNumber, $treatments,
+              $streetAddress, $shackID);
 
           $details = [];
           if (mysqli_stmt_fetch($stmt)) {
+
+              $addressString = trim($streetAddress);
+              if (strlen(trim($shackID)) != 0) {
+
+                  if (strlen($addressString) > 0) {
+                      $addressString = $addressString.', ';
+                  }
+                  $addressString = $addressString.'Shack ID: '.trim($shackID);
+              }
+
+              $addressString = strlen($addressString) > 0 ? $addressString : 'Unspecified Address';
 
               $details = [
                   "id"=>$animalID,
                   "animal_type_id"=>$animalTypeID,
                   "residence_id"=>$residenceID,
+                  "display_address"=>$addressString,
                   "name"=>$name,
                   "approximate_dob"=>$approximateDOB,
                   "notes"=>$notes,
