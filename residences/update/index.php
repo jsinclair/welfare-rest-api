@@ -120,6 +120,8 @@ if ($responseCode == 200) {
             throw new Exception("Database exception, contact an administrator.");
         }
 
+        $data['residence_id'] = $residenceID;
+
         // Update the animals assigned to this residence
         if (isset($decodedJSON["animals"])) {
             $animalIDs = $decodedJSON["animals"];

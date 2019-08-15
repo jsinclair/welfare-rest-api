@@ -51,6 +51,8 @@ if ($responseCode == 200) {
         $welfareNumber = $decodedJSON['welfare_number'];
         $treatments = $decodedJSON['treatments'];
 
+        $insert = false;
+
         // Validate the DOB, set to null if invalid
         if ($approximateDOB != null) {
             $d = DateTime::createFromFormat('Y-m-d', $approximateDOB);
@@ -81,6 +83,7 @@ if ($responseCode == 200) {
             $params = [$animalTypeID, $residenceID, $name, $approximateDOB,
               $notes, $welfareNumber, $treatments];
             $message = $name." Added";
+            $insert = true;
         }
 
         $dbConnection = getDBConnection();
@@ -91,6 +94,10 @@ if ($responseCode == 200) {
 
             if (mysqli_stmt_execute($stmt)) {
                 $data['message'] = $message;
+
+                if ($insert) {
+                    $animalID = mysqli_insert_id($dbConnection);
+                }
             } else {
                 throw new Exception("Database exception, contact an administrator.");
             }
@@ -100,6 +107,8 @@ if ($responseCode == 200) {
         } else {
             throw new Exception("Database exception, contact an administrator.");
         }
+
+        $data['animal_id'] = $animalID;
 
     } catch(Exception $e) {
         $responseCode = 400;
