@@ -12,7 +12,7 @@ $responseCode = 200;
 
 // Request validation
 try {
-    validateRequestMethod('DELETE');
+    validateRequestMethod('POST');
 
     validateAuthorizationHeader();
 
