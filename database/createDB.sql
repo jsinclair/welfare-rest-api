@@ -29,9 +29,11 @@ CREATE TABLE `animal` (
   `residence_id` int(11) NULL,
   `name` varchar(100) NOT NULL,
   `approximate_dob` date DEFAULT NULL COMMENT 'Set when the users sends the approximate age through.',
-  `notes` text NOT NULL,
-  `welfare_number` varchar(15) DEFAULT NULL,
-  `treatments` text NOT NULL,
+  `notes` text NULL,
+  `treatments` text NULL,
+  `gender` varchar(10) NULL,
+  `description` text NULL,
+  `sterilised` BIT(1) NOT NULL DEFAULT b'0',
   `deleted` BIT(1) NOT NULL DEFAULT b'0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -108,6 +110,9 @@ CREATE TABLE `reminder` (
 
 CREATE TABLE `residence` (
   `id` int(11) NOT NULL,
+  `resident_name` varchar(100) DEFAULT NULL,
+  `tel_no` varchar(20) DEFAULT NULL,
+  `id_no` varchar(15) DEFAULT NULL,
   `shack_id` varchar(100) DEFAULT NULL,
   `street_address` varchar(255) DEFAULT NULL,
   `latitude` double NOT NULL,
@@ -156,7 +161,10 @@ ALTER TABLE `animal`
   ADD PRIMARY KEY (`id`),
   ADD KEY `animal_name_index` (`name`),
   ADD KEY `animal_residence` (`residence_id`),
-  ADD KEY `animal_animal_type` (`animal_type_id`);
+  ADD KEY `animal_animal_type` (`animal_type_id`),
+  ADD KEY `animal_gender_index` (`gender`),
+  ADD KEY `animal_sterilised_index` (`sterilised`);
+
 
 --
 -- Indexes for table `animal_type`
@@ -199,7 +207,10 @@ ALTER TABLE `reminder`
 ALTER TABLE `residence`
   ADD PRIMARY KEY (`id`),
   ADD KEY `shack_id_index` (`shack_id`),
-  ADD KEY `street_address_index` (`street_address`);
+  ADD KEY `street_address_index` (`street_address`),
+  ADD KEY `residence_name_index` (`resident_name`),
+  ADD KEY `residence_tel_no_index` (`tel_no`),
+  ADD KEY `residence_id_no_index` (`id_no`);
 
 --
 -- Indexes for table `user_permission`
@@ -277,6 +288,7 @@ ALTER TABLE `user_session`
 ALTER TABLE `animal`
   ADD CONSTRAINT `animal_animal_type` FOREIGN KEY (`animal_type_id`) REFERENCES `animal_type` (`id`),
   ADD CONSTRAINT `animal_residence` FOREIGN KEY (`residence_id`) REFERENCES `residence` (`id`);
+
 
 --
 -- Constraints for table `organisation_user`
