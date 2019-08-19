@@ -45,7 +45,9 @@ if ($responseCode == 200) {
     try {
 
       $query = 'SELECT IFNULL(r.shack_id, \'\') as shack_id,
-          IFNULL(r.street_address, \'\') as street_address, r.latitude, r.longitude, r.notes
+          IFNULL(r.street_address, \'\') as street_address, r.latitude, r.longitude,
+          r.notes, IFNULL(r.resident_name, \'\') as resident_name,
+          IFNULL(r.tel_no, \'\') as tel_no, IFNULL(r.id_no, \'\') as id_no
         FROM residence r
         WHERE r.id = ?';
       $paramTypes = 'i';
@@ -63,7 +65,7 @@ if ($responseCode == 200) {
           mysqli_stmt_execute($stmt);
 
           mysqli_stmt_bind_result($stmt, $shackID, $streetAddress,
-              $latitude, $longitude, $notes);
+              $latitude, $longitude, $notes, $residentName, $telNo, $idNo);
 
           $details = [];
           if (mysqli_stmt_fetch($stmt)) {
@@ -74,13 +76,16 @@ if ($responseCode == 200) {
                   "street_address"=>$streetAddress,
                   "latitude"=>$latitude,
                   "longitude"=>$longitude,
-                  "notes"=>$notes
+                  "notes"=>$notes,
+                  "resident_name"=>$residentName,
+                  "tel_no"=>$telNo,
+                  "id_no"=>$idNo
               ];
 
               mysqli_stmt_close($stmt);
 
               // Select the animals for the residence
-              if ($stmt = mysqli_prepare($dbConnection, 'SELECT a.id, a.name, a.welfare_number
+              if ($stmt = mysqli_prepare($dbConnection, 'SELECT a.id, a.name
                     FROM animal a
                     WHERE a.residence_id = ?
                     AND a.deleted = 0')) {
@@ -91,8 +96,7 @@ if ($responseCode == 200) {
                   mysqli_stmt_execute($stmt);
 
                   /* bind variables to prepared statement */
-                  mysqli_stmt_bind_result($stmt, $animalID, $animalName,
-                    $animalWelfareNumber);
+                  mysqli_stmt_bind_result($stmt, $animalID, $animalName);
 
                   $animals = [];
                   /* fetch values, build up animal type list */
@@ -100,7 +104,6 @@ if ($responseCode == 200) {
                       array_push($animals, [
                           "id"=>$animalID,
                           "name"=>$animalName,
-                          "welfare_number"=>$animalWelfareNumber,
                       ]);
                   }
 

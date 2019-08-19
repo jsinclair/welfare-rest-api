@@ -47,6 +47,9 @@ if ($responseCode == 200) {
         $latitude = $decodedJSON['latitude'];
         $longitude = $decodedJSON['longitude'];
         $notes = $decodedJSON['notes'];
+        $residentName = $decodedJSON['resident_name'];
+        $idNo = $decodedJSON['id_no'];
+        $telNo = $decodedJSON['tel_no'];
 
         $insert = false;
 
@@ -81,18 +84,22 @@ if ($responseCode == 200) {
               street_address = ?,
               latitude = ?,
               longitude = ?,
-              notes = ?
+              notes = ?,
+              resident_name = ?,
+              id_no = ?,
+              tel_no = ?
               WHERE id = ?";
-          $paramTypes = 'ssddsi';
-          $params = [$shackID, $streetAddress, $latitude,
-            $longitude, $notes, $residenceID];
+          $paramTypes = 'ssddssssi';
+          $params = [$shackID, $streetAddress, $latitude, $longitude, $notes,
+            $residentName, $idNo, $telNo, $residenceID];
             $message = "Residence Updated";
         } else {
-            $query = "INSERT INTO residence (shack_id, street_address, latitude, longitude, notes)
-              VALUES (?, ?, ?, ?, ?)";
-            $paramTypes = 'ssdds';
-            $params = [$shackID, $streetAddress, $latitude,
-              $longitude, $notes];
+            $query = "INSERT INTO residence (shack_id, street_address, latitude, longitude,
+                notes, resident_name, id_no, tel_no)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $paramTypes = 'ssddssss';
+            $params = [$shackID, $streetAddress, $latitude, $longitude, $notes,
+                $residentName, $idNo, $telNo];
             $message = "Residence Added";
 
             $insert = true;

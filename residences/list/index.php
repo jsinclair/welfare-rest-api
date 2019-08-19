@@ -31,7 +31,8 @@ if ($responseCode == 200) {
     try {
 
         $query = 'SELECT r.id, IFNULL(r.shack_id, \'\') as shack_id,
-            IFNULL(r.street_address, \'\') as street_address, r.latitude, r.longitude,
+            IFNULL(r.street_address, \'\') as street_address,
+            r.latitude, r.longitude, r.resident_name, r.tel_no, r.id_no,
             IFNULL(GROUP_CONCAT(a.NAME ORDER BY a.NAME ASC SEPARATOR \', \'), \'\') as animals
             FROM residence r
             LEFT JOIN animal a ON a.residence_id = r.id
@@ -55,6 +56,30 @@ if ($responseCode == 200) {
             array_push($params, '%'.$streetAddress.'%');
         }
 
+        if (isset($_GET["resident_name"])) {
+            $residentName = $_GET['resident_name'];
+            $query = $query.' AND r.resident_name LIKE ?';
+
+            $paramTypes = $paramTypes.'s';
+            array_push($params, '%'.$residentName.'%');
+        }
+
+        if (isset($_GET["tel_no"])) {
+            $telNo = $_GET['tel_no'];
+            $query = $query.' AND r.tel_no LIKE ?';
+
+            $paramTypes = $paramTypes.'s';
+            array_push($params, '%'.$telNo.'%');
+        }
+
+        if (isset($_GET["id_no"])) {
+            $idNo = $_GET['id_no'];
+            $query = $query.' AND r.id_no LIKE ?';
+
+            $paramTypes = $paramTypes.'s';
+            array_push($params, '%'.$idNo.'%');
+        }
+
         $dbConnection = getDBConnection();
 
         $query = $query.' GROUP BY r.id';
@@ -71,7 +96,8 @@ if ($responseCode == 200) {
 
             /* bind variables to prepared statement */
             mysqli_stmt_bind_result($stmt, $residenceID, $shackID,
-                $streetAddress, $latitude, $longitude, $animals);
+                $streetAddress, $latitude, $longitude, $residentName, $telNo,
+                $idNo, $animals);
 
             $residences = [];
             /* fetch values */
@@ -84,6 +110,9 @@ if ($responseCode == 200) {
                     "street_address"=>$streetAddress,
                     "latitude"=>$latitude,
                     "longitude"=>$longitude,
+                    "resident_name"=>$residentName,
+                    "tel_no"=>$telNo,
+                    "id_no"=>$idNo,
                     "animals"=>$animals
                 ]);
             }
