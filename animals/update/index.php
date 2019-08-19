@@ -32,8 +32,7 @@ try {
 if ($responseCode == 200) {
   try {
     validateJSONObject($decodedJSON,
-      ['animal_type_id', 'name', 'notes',
-        'welfare_number', 'treatments'], true);
+      ['animal_type_id', 'name', 'notes', 'treatments', 'sterilised'], true);
   } catch(Exception $e) {
     $responseCode = 400;
     array_push($errors, buildError('Missing Parameters', $e->getMessage()));
@@ -48,8 +47,10 @@ if ($responseCode == 200) {
         $name = $decodedJSON['name'];
         $approximateDOB = $decodedJSON['approximate_dob'];
         $notes = $decodedJSON['notes'];
-        $welfareNumber = $decodedJSON['welfare_number'];
         $treatments = $decodedJSON['treatments'];
+        $gender = $decodedJSON['gender'];
+        $description = $decodedJSON['description'];
+        $sterilised = $decodedJSON['sterilised'];
 
         $insert = false;
 
@@ -68,20 +69,22 @@ if ($responseCode == 200) {
               name = ?,
               approximate_dob = ?,
               notes = ?,
-              welfare_number = ?,
-              treatments = ?
+              treatments = ?,
+              gender = ?,
+              description = ?,
+              sterilised = ?
               WHERE id = ?";
-          $paramTypes = 'iisssssi';
+          $paramTypes = 'iissssssii';
           $params = [$animalTypeID, $residenceID, $name, $approximateDOB,
-            $notes, $welfareNumber, $treatments, $animalID];
+            $notes, $treatments, $gender, $description, $sterilised, $animalID];
           $message = $name." Updated";
         } else {
             $query = "INSERT INTO animal (animal_type_id, residence_id, name,
-              approximate_dob, notes, welfare_number, treatments)
-              VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $paramTypes = 'iisssss';
+              approximate_dob, notes, treatments, gender, description, sterilised)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $paramTypes = 'iissssssi';
             $params = [$animalTypeID, $residenceID, $name, $approximateDOB,
-              $notes, $welfareNumber, $treatments];
+              $notes, $treatments, $gender, $description, $sterilised];
             $message = $name." Added";
             $insert = true;
         }

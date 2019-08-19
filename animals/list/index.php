@@ -31,7 +31,8 @@ if ($responseCode == 200) {
     try {
 
       $query = 'SELECT a.id, a.animal_type_id, at.description, a.name,
-        IFNULL(a.approximate_dob, \'\') as approximate_dob, a.welfare_number
+        IFNULL(a.approximate_dob, \'\') as approximate_dob,
+        IFNULL(a.gender, \'\') as gender, a.sterilised
         FROM animal a
         JOIN animal_type at ON at.id = a.animal_type_id
         WHERE a.deleted = 0';
@@ -54,12 +55,20 @@ if ($responseCode == 200) {
           array_push($params, '%'.$name.'%');
       }
 
-      if (isset($_GET["welfare_number"])) {
-          $welfareNumber = $_GET['welfare_number'];
-          $query = $query.' AND a.welfare_number LIKE ?';
+      if (isset($_GET["gender"])) {
+          $gender = $_GET['gender'];
+          $query = $query.' AND a.gender LIKE ?';
 
           $paramTypes = $paramTypes.'s';
-          array_push($params, '%'.$welfareNumber.'%');
+          array_push($params, $gender);
+      }
+
+      if (isset($_GET["sterilised"])) {
+          $sterilised = $_GET['sterilised'];
+          $query = $query.' AND a.sterilised = ?';
+
+          $paramTypes = $paramTypes.'i';
+          array_push($params, $sterilised);
       }
 
       $dbConnection = getDBConnection();
@@ -77,8 +86,7 @@ if ($responseCode == 200) {
 
           /* bind variables to prepared statement */
           mysqli_stmt_bind_result($stmt, $animalID, $animalTypeID,
-              $description, $name, $approximateDOB,
-              $welfareNumber);
+              $description, $name, $approximateDOB, $gender, $sterilised);
 
           $animals = [];
           /* fetch values */
@@ -91,7 +99,8 @@ if ($responseCode == 200) {
                   "name"=>$name,
                   "description"=>$description,
                   "approximate_dob"=>$approximateDOB,
-                  "welfare_number"=>$welfareNumber
+                  "gender"=>$gender,
+                  "sterilised"=>$sterilised
               ]);
           }
 

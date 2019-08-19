@@ -45,8 +45,9 @@ if ($responseCode == 200) {
     try {
 
       $query = 'SELECT a.animal_type_id, a.residence_id, a.name,
-        IFNULL(a.approximate_dob, \'\') as approximate_dob, a.notes, a.welfare_number, a.treatments,
-        r.street_address, r.shack_id
+        IFNULL(a.approximate_dob, \'\') as approximate_dob, a.notes, a.treatments,
+        r.street_address, r.shack_id, IFNULL(a.description, \'\') as description,
+        a.sterilised, IFNULL(a.gender, \'\') as gender
         FROM animal a
         LEFT JOIN residence r on r.id = a.residence_id
         WHERE a.id = ?';
@@ -65,8 +66,8 @@ if ($responseCode == 200) {
           mysqli_stmt_execute($stmt);
 
           mysqli_stmt_bind_result($stmt, $animalTypeID, $residenceID,
-              $name, $approximateDOB, $notes, $welfareNumber, $treatments,
-              $streetAddress, $shackID);
+              $name, $approximateDOB, $notes, $treatments,
+              $streetAddress, $shackID, $description, $sterilised, $gender);
 
           $details = [];
           if (mysqli_stmt_fetch($stmt)) {
@@ -90,8 +91,10 @@ if ($responseCode == 200) {
                   "name"=>$name,
                   "approximate_dob"=>$approximateDOB,
                   "notes"=>$notes,
-                  "welfare_number"=>$welfareNumber,
-                  "treatments"=>$treatments
+                  "treatments"=>$treatments,
+                  "description"=>$description,
+                  "sterilised"=>$sterilised,
+                  "gender"=>$gender
               ];
           }
 
