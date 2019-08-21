@@ -33,7 +33,7 @@ CREATE TABLE `animal` (
   `treatments` text NULL,
   `gender` varchar(10) NULL,
   `description` text NULL,
-  `sterilised` BIT(1) NOT NULL DEFAULT b'0',
+  `sterilised` BIT(1) NULL,
   `deleted` BIT(1) NOT NULL DEFAULT b'0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

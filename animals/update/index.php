@@ -32,7 +32,7 @@ try {
 if ($responseCode == 200) {
   try {
     validateJSONObject($decodedJSON,
-      ['animal_type_id', 'name', 'notes', 'treatments', 'sterilised'], true);
+      ['animal_type_id', 'name', 'notes', 'treatments'], true);
   } catch(Exception $e) {
     $responseCode = 400;
     array_push($errors, buildError('Missing Parameters', $e->getMessage()));
