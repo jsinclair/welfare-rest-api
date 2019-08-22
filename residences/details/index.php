@@ -85,7 +85,7 @@ if ($responseCode == 200) {
               mysqli_stmt_close($stmt);
 
               // Select the animals for the residence
-              if ($stmt = mysqli_prepare($dbConnection, 'SELECT a.id, a.name
+              if ($stmt = mysqli_prepare($dbConnection, 'SELECT a.id, a.name, a.sterilised
                     FROM animal a
                     WHERE a.residence_id = ?
                     AND a.deleted = 0')) {
@@ -96,7 +96,7 @@ if ($responseCode == 200) {
                   mysqli_stmt_execute($stmt);
 
                   /* bind variables to prepared statement */
-                  mysqli_stmt_bind_result($stmt, $animalID, $animalName);
+                  mysqli_stmt_bind_result($stmt, $animalID, $animalName, $animalSterilised);
 
                   $animals = [];
                   /* fetch values, build up animal type list */
@@ -104,6 +104,7 @@ if ($responseCode == 200) {
                       array_push($animals, [
                           "id"=>$animalID,
                           "name"=>$animalName,
+                          "sterilised"=>$animalSterilised
                       ]);
                   }
 
