@@ -34,7 +34,13 @@ if ($responseCode == 200) {
             IFNULL(r.street_address, \'\') as street_address,
             r.latitude, r.longitude, IFNULL(r.resident_name, \'\') as resident_name,
             IFNULL(r.tel_no, \'\') as tel_no, IFNULL(r.id_no, \'\') as id_no,
-            IFNULL(GROUP_CONCAT(a.NAME ORDER BY a.NAME ASC SEPARATOR \', \'), \'\') as animals
+            IFNULL(GROUP_CONCAT(a.NAME ORDER BY a.NAME ASC SEPARATOR \', \'), \'\') as animals,
+            CASE
+                WHEN MIN(a.id) IS NULL THEN \'No animals\'
+                WHEN MIN(IFNULL(a.sterilised, -1)) = -1 THEN \'Unknown\'
+                WHEN MIN(a.sterilised) = 0 THEN \'No\'
+                ELSE \'Yes\'
+            END as animals_sterilised
             FROM residence r
             LEFT JOIN animal a ON a.residence_id = r.id
             WHERE r.deleted = 0
@@ -98,7 +104,7 @@ if ($responseCode == 200) {
             /* bind variables to prepared statement */
             mysqli_stmt_bind_result($stmt, $residenceID, $shackID,
                 $streetAddress, $latitude, $longitude, $residentName, $telNo,
-                $idNo, $animals);
+                $idNo, $animals, $animalsSterilised);
 
             $residences = [];
             /* fetch values */
@@ -114,7 +120,8 @@ if ($responseCode == 200) {
                     "resident_name"=>$residentName,
                     "tel_no"=>$telNo,
                     "id_no"=>$idNo,
-                    "animals"=>$animals
+                    "animals"=>$animals,
+                    "animals_sterilised"=>$animalsSterilised
                 ]);
             }
 
