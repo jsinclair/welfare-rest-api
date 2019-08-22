@@ -32,7 +32,8 @@ if ($responseCode == 200) {
 
         $query = 'SELECT r.id, IFNULL(r.shack_id, \'\') as shack_id,
             IFNULL(r.street_address, \'\') as street_address,
-            r.latitude, r.longitude, r.resident_name, r.tel_no, r.id_no,
+            r.latitude, r.longitude, IFNULL(r.resident_name, \'\') as resident_name,
+            IFNULL(r.tel_no, \'\') as tel_no, IFNULL(r.id_no, \'\') as id_no,
             IFNULL(GROUP_CONCAT(a.NAME ORDER BY a.NAME ASC SEPARATOR \', \'), \'\') as animals
             FROM residence r
             LEFT JOIN animal a ON a.residence_id = r.id
