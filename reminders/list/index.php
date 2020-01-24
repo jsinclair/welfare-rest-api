@@ -30,12 +30,16 @@ try {
 if ($responseCode == 200) {
     try {
 
-      $query = 'SELECT r.id, a.name, r.reason, r.date
+      $query = 'SELECT r.id, r.date,
+        IFNULL(GROUP_CONCAT(a.name ORDER BY a.name ASC SEPARATOR \', \'), \'No animals selected.\') animals
         FROM reminder r
-        JOIN animal a ON a.id = r.animal_id
-        JOIN user_session us ON us.user_id = r.user_id
+        JOIN organisation_user ou ON ou.organisation_id = r.organisation_id
+        JOIN user_session us ON us.user_id = ou.id
+        LEFT JOIN reminder_animal ra ON ra.reminder_id = r.id
+        LEFT JOIN animal a ON a.id = ra.animal_id
         WHERE us.token LIKE ?
         AND r.disabled = 0
+        GROUP BY r.id
         ORDER BY r.DATE ASC';
       $paramTypes = 's';
       $params = [$sessionToken];
@@ -52,8 +56,7 @@ if ($responseCode == 200) {
           mysqli_stmt_execute($stmt);
 
           /* bind variables to prepared statement */
-          mysqli_stmt_bind_result($stmt, $reminderID, $name,
-              $reason, $date);
+          mysqli_stmt_bind_result($stmt, $reminderID, $date, $animals);
 
           $reminders = [];
           /* fetch values */
@@ -62,9 +65,8 @@ if ($responseCode == 200) {
               /* build up the residence list */
               array_push($reminders, [
                   "id"=>$reminderID,
-                  "name"=>$name,
-                  "reason"=>$reason,
-                  "date"=>$date
+                  "date"=>$date,
+                  "animals"=>$animals
               ]);
           }
 
@@ -73,7 +75,7 @@ if ($responseCode == 200) {
           /* close statement */
           mysqli_stmt_close($stmt);
       } else {
-          throw new Exception("Database exception, contact an administrator.");
+          throw new Exception("Database exception, contact an administrator. ".$stmt->error);
       }
     } catch(Exception $e) {
         $responseCode = 400;

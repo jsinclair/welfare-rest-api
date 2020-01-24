@@ -95,11 +95,21 @@ CREATE TABLE `permission` (
 
 CREATE TABLE `reminder` (
   `id` int(11) NOT NULL,
-  `animal_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `reason` varchar(255) NOT NULL,
+  `organisation_id` int(11) NOT NULL,
+  `note` varchar(255) NOT NULL,
   `disabled` BIT(1) NOT NULL DEFAULT b'0',
   `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reminder_animal`
+--
+
+CREATE TABLE `reminder_animal` (
+  `reminder_id` int(11) NOT NULL,
+  `animal_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -198,8 +208,13 @@ ALTER TABLE `permission`
 --
 ALTER TABLE `reminder`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `reminder_animal` (`animal_id`),
-  ADD KEY `reminder_user` (`user_id`);
+  ADD KEY `reminder_organisation` (`organisation_id`);
+
+--
+-- Indexes for table `reminder_animal`
+--
+ALTER TABLE `reminder_animal`
+ADD PRIMARY KEY (`reminder_id`,`animal_id`);
 
 --
 -- Indexes for table `residence`
@@ -300,8 +315,14 @@ ALTER TABLE `organisation_user`
 -- Constraints for table `reminder`
 --
 ALTER TABLE `reminder`
-  ADD CONSTRAINT `reminder_animal` FOREIGN KEY (`animal_id`) REFERENCES `animal` (`id`),
-  ADD CONSTRAINT `reminder_user` FOREIGN KEY (`user_id`) REFERENCES `organisation_user` (`id`);
+  ADD CONSTRAINT `reminder_organisation` FOREIGN KEY (`organisation_id`) REFERENCES `organisation` (`id`);
+
+--
+-- Constraints for table `reminder_animal`
+--
+ALTER TABLE `reminder_animal`
+ADD CONSTRAINT `reminder_animal_animal` FOREIGN KEY (`animal_id`) REFERENCES `animal` (`id`),
+ADD CONSTRAINT `reminder_animal_reminder` FOREIGN KEY (`reminder_id`) REFERENCES `reminder` (`id`);
 
 --
 -- Constraints for table `user_permission`

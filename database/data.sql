@@ -75,16 +75,6 @@ INSERT INTO `animal` (`id`, `animal_type_id`, `residence_id`, `name`, `approxima
 	(7, 3, 1, 'Katie', '2019-02-20', 'Post Note', 'All the treatments', 'FEMALE', 1);
 /*!40000 ALTER TABLE `animal` ENABLE KEYS */;
 
--- Dumping data for table animal_welfare.reminder: ~3 rows (approximately)
-DELETE FROM `reminder`;
-/*!40000 ALTER TABLE `reminder` DISABLE KEYS */;
-INSERT INTO `reminder` (`id`, `animal_id`, `user_id`, `reason`, `disabled`, `date`) VALUES
-	(1, 3, 1, 'To give Beeno', b'0', '2019-02-16'),
-	(2, 4, 1, 'Also to give Beenos', b'0', '2019-02-16'),
-	(3, 1, 1, 'Post Test', b'0', '2019-02-20'),
-	(4, 1, 1, 'Post Test', b'0', '2019-02-17');
-/*!40000 ALTER TABLE `reminder` ENABLE KEYS */;
-
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
