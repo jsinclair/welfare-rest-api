@@ -409,7 +409,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"reminder_id\":3,\n\t\"animal_id\":1,\n\t\"reason\":\"Post Test\",\n\t\"date\":\"2019/02/20\"\n}"
+							"raw": "{\n\t\"reminder_id\":4,\n\t\"animals\":[1],\n\t\"note\":\"Post Test 4\",\n\t\"date\":\"2019/02/20\"\n}"
 						},
 						"url": {
 							"raw": "{{baseURL}}welfare-rest-api/reminders/update/",
@@ -420,6 +420,36 @@
 								"reminders",
 								"update",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reminder Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{welfareSessionToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}welfare-rest-api/reminders/details?reminder_id=1",
+							"host": [
+								"{{baseURL}}welfare-rest-api"
+							],
+							"path": [
+								"reminders",
+								"details"
+							],
+							"query": [
+								{
+									"key": "reminder_id",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -470,7 +500,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"username\":\"jsincl4ir@gmail.com\",\n  \"password\":\"password\",\n  \"os_version\":\"4.0\",\n  \"device\":\"S8\",\n  \"uuid\":\"123456\"\n}"
+					"raw": "{\n  \"username\":\"test@overtake.co.za\",\n  \"password\":\"password\",\n  \"os_version\":\"4.0\",\n  \"device\":\"S8\",\n  \"uuid\":\"123456\"\n}"
 				},
 				"url": {
 					"raw": "{{baseURL}}welfare-rest-api/authentication/",
