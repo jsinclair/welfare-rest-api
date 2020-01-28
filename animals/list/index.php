@@ -116,7 +116,7 @@ if ($responseCode == 200) {
                   "approximate_dob"=>$approximateDOB,
                   "gender"=>$gender,
                   "sterilised"=>$sterilised,
-                  "dispaly_address"=>$addressString
+                  "display_address"=>$addressString
               ]);
           }
 
