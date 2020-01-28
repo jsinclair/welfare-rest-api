@@ -32,9 +32,11 @@ if ($responseCode == 200) {
 
       $query = 'SELECT a.id, a.animal_type_id, at.description, a.name,
         IFNULL(a.approximate_dob, \'\') as approximate_dob,
-        IFNULL(a.gender, \'\') as gender, a.sterilised
+        IFNULL(a.gender, \'\') as gender, a.sterilised,
+        r.street_address, r.shack_id
         FROM animal a
         JOIN animal_type at ON at.id = a.animal_type_id
+        LEFT JOIN residence r ON r.id = a.residence_id
         WHERE a.deleted = 0';
       $paramTypes = '';
       $params = [];
@@ -86,11 +88,24 @@ if ($responseCode == 200) {
 
           /* bind variables to prepared statement */
           mysqli_stmt_bind_result($stmt, $animalID, $animalTypeID,
-              $description, $name, $approximateDOB, $gender, $sterilised);
+              $description, $name, $approximateDOB, $gender, $sterilised,
+              $streetAddress, $shackID);
 
           $animals = [];
           /* fetch values */
           while (mysqli_stmt_fetch($stmt)) {
+
+              // Build the address string
+              $addressString = trim($streetAddress);
+              if (strlen(trim($shackID)) != 0) {
+
+                  if (strlen($addressString) > 0) {
+                      $addressString = $addressString.', ';
+                  }
+                  $addressString = $addressString.'Shack ID: '.trim($shackID);
+              }
+
+              $addressString = strlen($addressString) > 0 ? $addressString : 'Unspecified Address';
 
               /* build up the residence list */
               array_push($animals, [
@@ -100,7 +115,8 @@ if ($responseCode == 200) {
                   "description"=>$description,
                   "approximate_dob"=>$approximateDOB,
                   "gender"=>$gender,
-                  "sterilised"=>$sterilised
+                  "sterilised"=>$sterilised,
+                  "dispaly_address"=>$addressString
               ]);
           }
 
