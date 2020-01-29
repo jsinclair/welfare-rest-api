@@ -23,7 +23,7 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
     while (mysqli_stmt_fetch($stmt)) {
         // For each reminder, create the mail parameters
         $to = "jsincl4ir@gmail.com";
-        $subject = "Test Subject";
+        $subject = "Welfare Reminder";
         $from = "noreply@houseval.co.za";
         $headers[] = 'From: Welfare Mailer <'.$from.'>';
         $headers[] = 'MIME-Version: 1.0';
