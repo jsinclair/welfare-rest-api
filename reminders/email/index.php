@@ -25,9 +25,9 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
         $to = "jsincl4ir@gmail.com";
         $subject = "Test Subject";
         $from = "noreply@houseval.co.za";
+        $headers[] = 'From: Welfare Mailer <'.$from.'>';
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-        $headers[] = 'From: Welfare Mailer <'.$from.'>';
 
         // Select the animals for the reminder
         $query = 'SELECT a.name, r.street_address, r.shack_id
@@ -115,7 +115,7 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
         </html>";
 
         // Send the mail
-        if (mail($to,$subject,$message,implode("\r\n", $headers))) {
+        if (mail($to,$subject,$message,implode("\n", $headers))) {
            echo("Message successfully sent!");
         } else {
            echo("Message delivery failed...");
