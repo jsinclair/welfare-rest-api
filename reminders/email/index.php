@@ -14,6 +14,8 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
 
     mysqli_stmt_execute($stmt);
 
+    mysqli_stmt_store_result($stmt);
+
     /* bind variables to prepared statement */
     mysqli_stmt_bind_result($stmt, $reminderID, $organisationID, $note);
 
