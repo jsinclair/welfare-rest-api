@@ -25,9 +25,9 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
         $to = "jsincl4ir@gmail.com";
         $subject = "Test Subject";
         $from = "noreply@houseval.co.za";
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= 'From: <'.$from.'>' . "\r\n";;
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+        $headers[] = 'From: Welfare Mailer <'.$from.'>';
 
         // Select the animals for the reminder
         $query = 'SELECT a.name, r.street_address, r.shack_id
@@ -97,8 +97,8 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
             throw new Exception("Database exception, contact an administrator.");
         }
 
-
-        $headers .= 'Bcc: '.$bccString . "\r\n";
+        // Add Bcc header
+        $headers[] = 'Bcc:'.$bccString;
 
         // Create the message and headers
         $message = "<html>
@@ -115,7 +115,7 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
         </html>";
 
         // Send the mail
-        if (mail($to,$subject,$message,$headers)) {
+        if (mail($to,$subject,$message,implode("\r\n", $headers))) {
            echo("Message successfully sent!");
         } else {
            echo("Message delivery failed...");
@@ -130,5 +130,5 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
 
 // Then disable older reminders
 
-
+// admin@gaws.org.za
 ?>
