@@ -99,12 +99,11 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
         $headers[] = 'Bcc:'.$bccString;
 
         // Create the message and headers
-        $message = "
-            Dear Welfare System User,\r\n
-        	This is an automated email for a reminder scheduled in the app. Below are the details of the reminder\r\n
-            Reminder Note: ".$note."\r\n
-        	Reminder Animals: ".$animalMessage."\r\n
-            Have a great day!";
+        $message = "Dear Welfare System User,\r\n
+This is an automated email for a reminder scheduled in the app. Below are the details of the reminder\r\n
+Reminder Note: ".$note."\r\n
+Reminder Animals:\n".$animalMessage."\r\n
+Have a great day!";
 
         // Send the mail
         if (mail($to,$subject,$message,implode("\n", $headers))) {
