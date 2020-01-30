@@ -36,7 +36,7 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
         $paramTypes = 'i';
         $params = [$reminderID];
 
-        $animalMessage = '<ul>';
+        $animalMessage = '';
         $hasAnimals = false;
 
         if ($secondaryStmt = mysqli_prepare($dbConnection, $query)) {
@@ -60,14 +60,14 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
 
                 $addressString = strlen($addressString) > 0 ? $addressString : 'Unspecified Address';
 
-                $animalMessage .= '<li>'.$animalName.', '.$addressString.'</li>';
+                $animalMessage .= $animalName.", ".$addressString."\r\n";
             }
 
             mysqli_stmt_close($secondaryStmt);
         } else {
             throw new Exception("Database exception, contact an administrator.");
         }
-        $animalMessage .= '</ul>';
+        $animalMessage .= '';
 
         // Select the users for the company
         $bccString = '';
