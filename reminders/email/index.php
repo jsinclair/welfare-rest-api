@@ -22,10 +22,12 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
     /* fetch values */
     while (mysqli_stmt_fetch($stmt)) {
         // For each reminder, create the mail parameters
-        $to = "jsincl4ir@gmail.com";
+        $to = "buddasbox@webmail.co.za";
         $subject = "Welfare Reminder";
-        $from = "noreply@houseval.co.za";
-        $headers[] = 'From: Welfare Mailer <'.$from.'>';
+        $from = "jsincl4ir1@gmail.com";
+        $headers[] = "From: Welfare Mailer <".$from.">";
+        $headers[] = "Reply-To: Welfare Mailer <".$from.">";
+        $headers[] = "X-MSMail-Priority: High";
 
         // Select the animals for the reminder
         $query = 'SELECT a.name, r.street_address, r.shack_id
@@ -96,7 +98,7 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
         }
 
         // Add Bcc header
-        $headers[] = 'Bcc:'.$bccString;
+        $headers[] = "Bcc:".$bccString;
 
         // Create the message and headers
         $message = "Dear Welfare System User,\r\n
