@@ -26,8 +26,6 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
         $subject = "Welfare Reminder";
         $from = "noreply@houseval.co.za";
         $headers[] = 'From: Welfare Mailer <'.$from.'>';
-        $headers[] = 'MIME-Version: 1.0';
-        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
 
         // Select the animals for the reminder
         $query = 'SELECT a.name, r.street_address, r.shack_id
@@ -101,18 +99,12 @@ if ($stmt = mysqli_prepare($dbConnection, $query)) {
         $headers[] = 'Bcc:'.$bccString;
 
         // Create the message and headers
-        $message = "<html>
-        	<head>
-        		<title>Welfare Reminder</title
-        	</head>
-        	<body>
-              	<p>Dear Welfare System User,</p>
-        		<p>This is an automated email for a reminder scheduled in the app. Below are the details of the reminder</p>
-              	<p><strong>Reminder Note: </strong> ".$note."</p>
-        	    <p><strong>Reminder Animals: </strong></p>".$animalMessage."
-                <p>Have a great day!</p>
-            </body>
-        </html>";
+        $message = "
+            Dear Welfare System User,\r\n
+        	This is an automated email for a reminder scheduled in the app. Below are the details of the reminder\r\n
+            Reminder Note: ".$note."\r\n
+        	Reminder Animals: ".$animalMessage."\r\n
+            Have a great day!";
 
         // Send the mail
         if (mail($to,$subject,$message,implode("\n", $headers))) {
